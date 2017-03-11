@@ -13,6 +13,5 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         drawingView = (DrawingView)findViewById(R.id.drawer);
-
     }
 }
