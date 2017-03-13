@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ZoomButtonsController;
 
 import java.util.Random;
 
@@ -33,7 +34,7 @@ public class DrawingView extends View {
 
         //Only for testing
         Random r = new Random();
-            drawFromTo(r.nextInt(1000), r.nextInt(2000), r.nextInt(1000), r.nextInt(2000));
+            //drawFromTo(r.nextInt(1000), r.nextInt(2000), r.nextInt(1000), r.nextInt(2000));
 
     }
 
