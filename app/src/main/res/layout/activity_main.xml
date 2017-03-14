@@ -5,118 +5,25 @@
     android:layout_height="match_parent"
     tools:context="acceptable_risk.nik.uniobuda.hu.andrawid.MainActivity"
       >
-
-    <RelativeLayout
-        android:layout_width="280dp"
-        android:layout_height="match_parent"
-        android:id="@+id/drawerPane2"
-        android:layout_gravity="end">
-
-        <!-- Profile Box -->
-
-        <RelativeLayout
-            android:id="@+id/profileBox2"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@color/colorPrimary"
-            android:padding="8dp" >
-
-            <ImageView
-                android:id="@+id/avatar2"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@mipmap/ic_launcher_round"
-                android:layout_marginTop="15dp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="42dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@+id/avatar2"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/userName2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Options"
-                    android:textColor="#fff"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/desc2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginTop="4dp"
-                    android:text="Settings and options"
-                    android:textColor="#fff"
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </RelativeLayout>
-
-        <!-- List of Actions (pages) -->
-        <LinearLayout
-            android:id="@+id/navList2"
-            android:layout_width="280dp"
-            android:orientation="vertical"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/profileBox2"
-            android:choiceMode="singleChoice"
-            android:background="#ffffffff"  >
-            <Button
-                android:id="@+id/New"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="New"/>
-            <Button
-                android:id="@+id/Save"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Save"/>
-            <Button
-                android:id="@+id/Small_Brush"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Small Brushes"/>
-            <Button
-                android:id="@+id/Medium_Brush"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Medium Brush"/>
-            <Button
-                android:id="@+id/Large_Brush"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Large Brush"/>
-        </LinearLayout>
-
-    </RelativeLayout>
-
-
     <!-- The main content view
     http://codetheory.in/android-navigation-drawer/
+    https://developer.android.com/training/implementing-navigation/nav-drawer.html
     -->
-    <!-- The navigation drawer -->
     <RelativeLayout
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:id="@+id/drawerPane"
         android:layout_gravity="start">
 
-        <!-- Profile Box -->
-
         <RelativeLayout
-            android:id="@+id/profileBox"
+            android:id="@+id/drawerHeader"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:background="@color/colorPrimary"
             android:padding="8dp" >
 
             <ImageView
-                android:id="@+id/avatar"
+                android:id="@+id/drawerImage"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@mipmap/ic_launcher_round"
@@ -127,11 +34,11 @@
                 android:layout_height="42dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@+id/avatar"
+                android:layout_toRightOf="@+id/drawerImage"
                 android:orientation="vertical" >
 
                 <TextView
-                    android:id="@+id/userName"
+                    android:id="@+id/drawerTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Colors"
@@ -140,35 +47,74 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/desc"
+                    android:id="@+id/drawerDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_marginTop="4dp"
-                    android:text="Select a color to paint with"
+                    android:text="Select a color and brush size to paint with"
                     android:textColor="#fff"
                     android:textSize="12sp" />
             </LinearLayout>
-        </RelativeLayout>
-
-        <!-- List of Actions (pages) -->
+        </RelativeLayout>-->
+        <LinearLayout
+            android:id="@+id/brushSizes"
+            android:layout_below="@+id/drawerHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffffff">
+            <Button
+                android:id="@+id/smallBrush"
+                android:text="Small"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <Button
+                android:id="@+id/mediumBrush"
+                android:text="Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <Button
+                android:id="@+id/largeBrush"
+                android:text="Large"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </LinearLayout>
         <ListView
-            android:id="@+id/navList"
+            android:id="@+id/drawerList"
             android:layout_width="280dp"
             android:layout_height="match_parent"
-            android:layout_below="@+id/profileBox"
+            android:layout_below="@+id/brushSizes"
             android:choiceMode="singleChoice"
             android:background="#ffffffff" />
-
     </RelativeLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/buttonNew"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="New"/>
+            <Button
+                android:id="@+id/buttonSave"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Save"/>
+            <Button
+                android:id="@+id/loadButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Load"/>
+        </LinearLayout>
 
         <acceptable_risk.nik.uniobuda.hu.andrawid.DrawingView
-            android:id="@+id/drawer"
+            android:id="@+id/drawingView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="3dp"
