@@ -1,21 +1,26 @@
 package acceptable_risk.nik.uniobuda.hu.andrawid;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.TextView;
 
+import java.sql.BatchUpdateException;
 import java.util.ArrayList;
+import java.util.zip.Inflater;
 
 public class DrawerListAdapter extends BaseAdapter {
 
     Context mContext;
-    ArrayList<String> buttonNames;
+    ArrayList<ViewHolder> buttonNames;
 
-    public DrawerListAdapter(Context context, ArrayList<String> buttonNames) {
+    public DrawerListAdapter(Context context, ArrayList<ViewHolder> buttonNames) {
         mContext = context;
-        buttonNames = buttonNames;
+        this.buttonNames = buttonNames;
     }
 
     @Override
@@ -35,13 +40,17 @@ public class DrawerListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Button holder;
+        ViewHolder holder;
         if (convertView == null) {
-            holder = new Button(mContext);
+            convertView = new Button(mContext);
+            holder = new ViewHolder(buttonNames.get(position).text, buttonNames.get(position).color);
             convertView.setTag(holder);
         } else
-            holder = (Button) convertView.getTag();
-        holder.setText(buttonNames.get(position));
+            holder = (ViewHolder) convertView.getTag();
+        holder.text = buttonNames.get(position).text;
+        holder.color = buttonNames.get(position).color;
+        convertView.setBackgroundColor(Color.parseColor(holder.color));
+        ((Button)convertView).setText(holder.text);
         return convertView;
     }
 }
