@@ -42,15 +42,16 @@ public class DrawerListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = new Button(mContext);
+            convertView = new TextView(mContext);
             holder = new ViewHolder(buttonNames.get(position).text, buttonNames.get(position).color);
             convertView.setTag(holder);
+            convertView.setMinimumHeight(200);
         } else
             holder = (ViewHolder) convertView.getTag();
         holder.text = buttonNames.get(position).text;
         holder.color = buttonNames.get(position).color;
         convertView.setBackgroundColor(Color.parseColor(holder.color));
-        ((Button)convertView).setText(holder.text);
+        //((TextView)convertView).setText(holder.text);
         return convertView;
     }
 }

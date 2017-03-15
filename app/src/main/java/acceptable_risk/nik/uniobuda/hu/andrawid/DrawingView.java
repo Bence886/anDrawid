@@ -3,9 +3,11 @@ package acceptable_risk.nik.uniobuda.hu.andrawid;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ZoomButtonsController;
 
@@ -21,6 +23,7 @@ public class DrawingView extends View {
     private Paint paint, canvasPaint;
     private Canvas canvas;
     private Bitmap bmp;
+    private float brushSize;
 
     public DrawingView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -45,11 +48,16 @@ public class DrawingView extends View {
         canvas = new Canvas(bmp);
     }
 
+    public void setColor(String color)
+    {
+        paint.setColor(Color.parseColor(color));
+    }
+
     private void Init()
     {
         path = new Path();
         paint = new Paint();
-        paint.setColor(0xff0000ff);
+        paint.setColor(0x000000);
         paint.setAntiAlias(true);
         paint.setStrokeWidth(20);
         paint.setStyle(Paint.Style.STROKE);
@@ -67,5 +75,12 @@ public class DrawingView extends View {
         }
         path.reset();
         invalidate();
+    }
+
+    public void setBrushSize(float newSize){
+        float pixelAmount = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                newSize, getResources().getDisplayMetrics());
+        brushSize=pixelAmount;
+        paint.setStrokeWidth(brushSize);
     }
 }
