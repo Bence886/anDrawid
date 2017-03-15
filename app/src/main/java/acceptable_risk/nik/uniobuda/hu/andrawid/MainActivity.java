@@ -1,5 +1,7 @@
 package acceptable_risk.nik.uniobuda.hu.andrawid;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     DrawingView drawingView;
-    Button small_Button, medium_Button, large_Button;
+    Button small_Button, medium_Button, large_Button, new_Button, save_Button, load_Button;
     float smallBrush, mediumBrush, largeBrush;
     GridView drawerList;
     RelativeLayout drawer;
@@ -101,11 +103,50 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(v.getContext(), "Large Button Selected", Toast.LENGTH_SHORT).show();
             }
         });
+
+        //new, dave, load
+        new_Button = (Button)findViewById(R.id.buttonNew);
+        new_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder newDialog = new AlertDialog.Builder(v.getContext());
+                newDialog.setTitle("New drawing");
+                newDialog.setMessage("Start new drawing (you will lose the current drawing)?");
+                newDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which){
+                        drawingView.startNew();
+                        dialog.dismiss();
+                    }
+                });
+                newDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which){
+                        dialog.cancel();
+                    }
+                });
+                newDialog.show();
+            }
+        });
+        save_Button = (Button)findViewById(R.id.buttonSave);
+        save_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        load_Button = (Button)findViewById(R.id.loadButton);
+        load_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private void createDrawerColors() {
         drawerColors = new ArrayList<ViewHolder>();
         //add colors
+        drawerColors.add(new ViewHolder("Black", "#000000"));
+        drawerColors.add(new ViewHolder("White", "#FFFFFF"));
         drawerColors.add(new ViewHolder("Red", "#F44336"));
         drawerColors.add(new ViewHolder("Pink", "#E91E63"));
         drawerColors.add(new ViewHolder("Purple", "#9C27B0"));
@@ -125,20 +166,18 @@ public class MainActivity extends AppCompatActivity {
         drawerColors.add(new ViewHolder("Brown", "#795548"));
         drawerColors.add(new ViewHolder("Grey", "#9E9E9E"));
         drawerColors.add(new ViewHolder("Blue Grey", "#607D8B"));
-        drawerColors.add(new ViewHolder("Black", "#000000"));
-        drawerColors.add(new ViewHolder("White", "#FFFFFF"));
 
         //create brushes
         smallBrush = 10;
         mediumBrush = 20;
         largeBrush = 30;
     }
-
+/*
     public void setSelectedColor(int selectedColor) {
         this.selectedColor = selectedColor;
     }
 
     public int getSelectedColor() {
         return selectedColor;
-    }
+    }*/
 }

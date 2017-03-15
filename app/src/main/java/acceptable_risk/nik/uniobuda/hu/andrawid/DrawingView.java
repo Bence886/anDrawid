@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -38,7 +39,6 @@ public class DrawingView extends View {
         //Only for testing
         Random r = new Random();
             //drawFromTo(r.nextInt(1000), r.nextInt(2000), r.nextInt(1000), r.nextInt(2000));
-
     }
 
     @Override
@@ -51,6 +51,11 @@ public class DrawingView extends View {
     public void setColor(String color)
     {
         paint.setColor(Color.parseColor(color));
+    }
+
+    public void startNew(){
+        canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+        invalidate();
     }
 
     private void Init()
