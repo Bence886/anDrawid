@@ -1,15 +1,14 @@
 package acceptable_risk.nik.uniobuda.hu.andrawid;
 
-<<<<<<< HEAD
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v4.widget.DrawerLayout;
-=======
+
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
->>>>>>> sensor
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -50,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-<<<<<<< HEAD
         createDrawerColors();
 
         //Get views from xml
@@ -200,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return selectedColor;
     }*/
 }
-=======
+
         //create sensor listener
         sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
 
@@ -281,4 +279,3 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 }
->>>>>>> sensor
