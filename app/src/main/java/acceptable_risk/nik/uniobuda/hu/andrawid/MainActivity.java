@@ -2,6 +2,7 @@ package acceptable_risk.nik.uniobuda.hu.andrawid;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.support.v4.widget.DrawerLayout;
 
 import android.hardware.Sensor;
@@ -15,7 +16,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     DrawerLayout drawerLayout;
 
     ArrayList<ViewHolder> drawerColors;
-    private int selectedColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +131,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 newDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int which){
                         drawingView.startNew();
+                        CursorX=500;
+                        CursorY=1000;
                         dialog.dismiss();
                     }
                 });
@@ -157,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             }
         });
+        sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
     }
 
     private void createDrawerColors() {
@@ -189,28 +191,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mediumBrush = 20;
         largeBrush = 30;
     }
-/*
-    public void setSelectedColor(int selectedColor) {
-        this.selectedColor = selectedColor;
-    }
-
-    public int getSelectedColor() {
-        return selectedColor;
-    }*/
-}
-
-        //create sensor listener
-        sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
-
-    }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        //get the window properties (hopefully they are set by this time)
-        //height=<ourDrawingView>.getHeight();
-        //width=<ourDrawingView>.getWidth();
     }
 
     @Override
@@ -219,7 +203,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         //Sensor event listener register
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION), SensorManager.SENSOR_DELAY_NORMAL);
-
     }
 
     @Override
@@ -235,6 +218,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     //---!!---
     @Override
     public void onSensorChanged(SensorEvent event) {
+        //get the window properties (hopefully they are set by this time)
+        height=drawingView.getHeight();
+        width=drawingView.getWidth();
         if (Start==null)
         {//for the firs time
             Start=new Date(System.currentTimeMillis());
@@ -253,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 float newY = (float) (CursorY + (0.5 * ay * Math.pow(Elapsed, 2)) / div);
                 //if the cursor stays in the window
                 if (newX >= 0 && newY >= 0 && newX <= width && newY <= height){
-                    //---------------draw from CursorX/Y to newX/Y
+                    drawingView.drawFromTo(CursorX, CursorY, newX, newY);
                     //set new cursor position
                     CursorX=newX;
                     CursorY=newY;
@@ -262,12 +248,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     if (newX>width) newX=width;
                     if (newY<0) newY=0;
                     if (newY>height) newY=height;
-                    //----------------draw from CursorX/Y to newX/Y
+                    drawingView.drawFromTo(CursorX, CursorY, newX, newY);
                     CursorX=newX;
                     CursorY=newY;
                 }
-                Start=new Date(); //set new time
-            }else if (Elapsed > 50)
+                Start = new Date(); //set new time
+            }else if (Elapsed > 100)
             {
                 Start = new Date();
             }

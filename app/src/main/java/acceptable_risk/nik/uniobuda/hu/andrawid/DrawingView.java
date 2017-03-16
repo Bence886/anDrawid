@@ -37,7 +37,7 @@ public class DrawingView extends View {
         canvas.drawPath(path, paint);
 
         //Only for testing
-        Random r = new Random();
+        //Random r = new Random();
             //drawFromTo(r.nextInt(1000), r.nextInt(2000), r.nextInt(1000), r.nextInt(2000));
     }
 
