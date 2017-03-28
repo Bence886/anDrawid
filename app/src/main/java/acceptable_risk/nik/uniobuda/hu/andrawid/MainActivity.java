@@ -17,7 +17,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     float CursorX =500, CursorY=1000; //needs to be updated to the middle of the screen asap
     float height, width; //View width, height
     float xVelocity=0, yVelocity=0;
-    int div =10; //divide the phone movement
+    int div =100; //divide the phone movement
     Date Start;
 
     DrawingView drawingView;
@@ -255,26 +258,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             az=event.values[2];
 
             //if the acceleration is faster than 0.5m/s^2
-            if ((Math.abs(ax)>0.5 || Math.abs(ay)>0.5) && Elapsed<1000) {
+            if ((Math.abs(ax)>1 || Math.abs(ay)>1) && Elapsed<1000) {
 
-                xVelocity=(float)ax*Elapsed;
-                yVelocity=(float)ax*Elapsed;
+                xVelocity+=(float)ax*Elapsed;
+                yVelocity+=(float)ay*Elapsed;
+
+                float newX=0;
+                float newY=0;
 
                 //calculate X/Y Distance moved
                 //float newX = (CursorX + xVelocity/div);
                 //float newY = (CursorY + yVelocity/div);
 
-                float newX=0;
-                float newY=0;
-
-                if (xVelocity>0)
-                    newX=CursorX+div;
-                if (xVelocity<0)
-                    newX=CursorX-div;
-                if (yVelocity>0)
-                    newX=CursorY+div;
-                if (yVelocity<0)
-                    newX=CursorY-div;
+                newX=CursorX+xVelocity/div;
+                newY=CursorY+yVelocity/div;
 
                 //if the cursor stays in the window
                 if (newX >= 0 && newY >= 0 && newX <= width && newY <= height){
