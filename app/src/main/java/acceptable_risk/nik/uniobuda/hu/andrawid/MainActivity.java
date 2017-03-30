@@ -12,6 +12,7 @@ import android.hardware.SensorManager;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -25,9 +26,11 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 import java.util.Date;
+import java.util.StringTokenizer;
 import java.util.UUID;
+import java.util.regex.Matcher;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
+public class MainActivity extends AppCompatActivity {
     //sensor variables
     private SensorManager sensorManager;
     double ax,ay,az; //sensor x, y, z Acceleration
@@ -227,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onResume();
 
         //Sensor event listener register
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION), SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(sensorsListener, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
@@ -235,69 +238,83 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onPause();
 
         //unregister sensor listener at app pause
-        sensorManager.unregisterListener(this);
+        sensorManager.unregisterListener(sensorsListener);
     }
 
-    //---!!---
-    //This method needs cleanup, optimalization and corrections
-    //---!!---
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        //get the window properties (hopefully they are set by this time)
-        height=drawingView.getHeight();
-        width=drawingView.getWidth();
-        if (Start==null)
-        {//for the firs time
-            Start=new Date(System.currentTimeMillis());
-        }
-        float Elapsed = new Date().getTime() - Start.getTime(); //calculate time between event calls
+    SensorEventListener sensorsListener = new SensorEventListener() {
+        //---!!---
+        // ToDo : This method needs cleanup, optimalization and corrections
+        //---!!---
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            //get the window properties (hopefully they are set by this time)
+            float newX;
+            float newY;
+            height=drawingView.getHeight();
+            width=drawingView.getWidth();
 
-        if (event.sensor.getType()==Sensor.TYPE_LINEAR_ACCELERATION){ //get LinearAcceleration values
-            ax=event.values[0];
-            ay=event.values[1];
-            az=event.values[2];
+            if (Start==null)
+            {//for the firs time
+                Start=new Date(System.currentTimeMillis());
+            }
 
-            //if the acceleration is faster than 0.5m/s^2
-            if ((Math.abs(ax)>1 || Math.abs(ay)>1) && Elapsed<1000) {
+            float Elapsed = new Date().getTime() - Start.getTime(); //calculate time between event calls
 
-                xVelocity+=(float)ax*Elapsed;
-                yVelocity+=(float)ay*Elapsed;
+            if (event.sensor.getType()==Sensor.TYPE_ACCELEROMETER && height!=0){ //get LinearAcceleration values
+                ax=event.values[0];
+                ay=event.values[2];
+                az=event.values[2];
 
-                float newX=0;
-                float newY=0;
+                //if the acceleration is faster than 0.5m/s^2
+                if ((Math.abs(ax)>1 || Math.abs(ay)>1) && Elapsed<1000) {
 
-                //calculate X/Y Distance moved
-                //float newX = (CursorX + xVelocity/div);
-                //float newY = (CursorY + yVelocity/div);
+                    if (Math.abs(ax)>1){
+                        xVelocity+=(float)ax*Elapsed;}
+                    else{
+                        xVelocity=0;}
+                    if (Math.abs(ay)>1){
+                        yVelocity+=(float)ay*Elapsed;}
+                    else{
+                        yVelocity=0;}
 
-                newX=CursorX+xVelocity/div;
-                newY=CursorY+yVelocity/div;
+                    //calculate X/Y Distance moved
+                    //float newX = (CursorX + xVelocity/div);
+                    //float newY = (CursorY + yVelocity/div);
 
-                //if the cursor stays in the window
-                if (newX >= 0 && newY >= 0 && newX <= width && newY <= height){
-                    drawingView.drawFromTo(CursorX, CursorY, newX, newY);
-                    //set new cursor position
-                    CursorX=newX;
-                    CursorY=newY;
-                }else {
-                    if (newX<0) newX=0;
-                    if (newX>width) newX=width;
-                    if (newY<0) newY=0;
-                    if (newY>height) newY=height;
-                    drawingView.drawFromTo(CursorX, CursorY, newX, newY);
-                    CursorX=newX;
-                    CursorY=newY;
+                    newX=CursorX+xVelocity/div;
+                    newY=CursorY+yVelocity/div;
+
+                    Log.d("--!--", String.valueOf(newX) + " , " + String.valueOf(newY));
+
+
+                    //if the cursor stays in the window
+                    if (newX >= 0 && newY >= 0 && newX <= width && newY <= height){
+                        drawingView.drawFromTo(CursorX, CursorY, newX, newY);
+                        //set new cursor position
+                        CursorX=newX;
+                        CursorY=newY;
+                    }else { //if not
+                        if (newX<0) newX=0;
+                        if (newX>width) newX=width;
+                        if (newY<0) newY=0;
+                        if (newY>height) newY=height;
+                        drawingView.drawFromTo(CursorX, CursorY, newX, newY);
+                        CursorX=newX;
+                        CursorY=newY;
+                    }
+                    Start = new Date(); //set new time
+                }else if (Elapsed > 100)
+                {
+                    Start = new Date();
+                    xVelocity = 0;
+                    yVelocity = 0;
                 }
-                Start = new Date(); //set new time
-            }else if (Elapsed > 100)
-            {
-                Start = new Date();
             }
         }
-    }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-    }
+        }
+    };
 }
