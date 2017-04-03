@@ -62,7 +62,7 @@ public class DrawingView extends View {
     {
         path = new Path();
         paint = new Paint();
-        paint.setColor(0x000000);
+        paint.setColor(0xff000000);
         paint.setAntiAlias(true);
         paint.setStrokeWidth(20);
         paint.setStyle(Paint.Style.STROKE);

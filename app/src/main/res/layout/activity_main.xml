@@ -97,10 +97,12 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <Button
                 android:id="@+id/buttonNew"
                 android:layout_width="wrap_content"
@@ -111,11 +113,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Save"/>
-            <Button
-                android:id="@+id/loadButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Load"/>
         </LinearLayout>
 
         <acceptable_risk.nik.uniobuda.hu.andrawid.DrawingView
