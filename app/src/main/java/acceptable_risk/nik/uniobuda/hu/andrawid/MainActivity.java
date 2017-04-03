@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         //Sensor event listener register
-        sensorManager.registerListener(sensorsListener, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(sensorsListener, sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION), SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
 
             float Elapsed = new Date().getTime() - Start.getTime(); //calculate time between event calls
 
-            if (event.sensor.getType()==Sensor.TYPE_ACCELEROMETER && height!=0){ //get LinearAcceleration values
+            if (event.sensor.getType()==Sensor.TYPE_LINEAR_ACCELERATION && height!=0){ //get LinearAcceleration values
                 ax=event.values[0];
                 ay=event.values[2];
                 az=event.values[2];
