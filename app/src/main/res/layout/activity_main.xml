@@ -84,13 +84,13 @@
         <GridView
             android:id="@+id/drawerList"
             android:numColumns="4"
-            android:layout_width="280dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/brushSizes"
             android:choiceMode="singleChoice"
-            android:verticalSpacing="5dp"
-            android:horizontalSpacing="5dp"
-            android:background="#ffffffff" />
+            android:verticalSpacing="1dp"
+            android:horizontalSpacing="1dp"
+            android:background="#FFFFFF" />
     </RelativeLayout>
 
     <LinearLayout

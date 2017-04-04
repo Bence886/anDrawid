@@ -1,17 +1,27 @@
 package acceptable_risk.nik.uniobuda.hu.andrawid;
 
 import android.content.Context;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
+import android.graphics.drawable.shapes.Shape;
+import android.media.Image;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.nio.channels.Selector;
 import java.util.ArrayList;
 
 public class DrawerListAdapter extends BaseAdapter {
 
     Context mContext;
     ArrayList<Color> buttonNames;
+    public int selectedNum=0;
 
     public DrawerListAdapter(Context context, ArrayList<Color> buttonNames) {
         mContext = context;
@@ -35,7 +45,7 @@ public class DrawerListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Color holder;
+        /*Color holder;
         if (convertView == null) {
             convertView = new TextView(mContext);
             holder = new Color(buttonNames.get(position).text, buttonNames.get(position).color);
@@ -47,6 +57,19 @@ public class DrawerListAdapter extends BaseAdapter {
         holder.color = buttonNames.get(position).color;
         convertView.setBackgroundColor(android.graphics.Color.parseColor(holder.color));
         //((TextView)convertView).setText(holder.text);
-        return convertView;
+        return convertView;*/
+
+        ImageView shape = (ImageView) convertView;
+        if(shape==null){
+            shape= (ImageView) View.inflate(parent.getContext(), R.layout.color_layout, null);
+        }
+        Color color = buttonNames.get(position);
+        if (color.colorint == selectedNum){ //selected color
+            shape.getDrawable().setColorFilter(color.colorint, PorterDuff.Mode.DARKEN);
+        }else { //not selected colors
+            shape.getDrawable().setColorFilter(color.colorint, PorterDuff.Mode.ADD);
+        }
+
+        return shape;
     }
 }

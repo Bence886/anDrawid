@@ -94,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 drawingView.setColor(drawerColors.get(position).color);
+                ((DrawerListAdapter) parent.getAdapter()).selectedNum = drawerColors.get(position).colorint; //set the selected
+                ((DrawerListAdapter) parent.getAdapter()).notifyDataSetChanged(); //redraw list
                 Toast.makeText(view.getContext(), drawerColors.get(position).text, Toast.LENGTH_SHORT).show();
             }
         });
@@ -192,27 +194,27 @@ public class MainActivity extends AppCompatActivity {
     private void createDrawerColors() {
         drawerColors = new ArrayList<Color>();
         //add colors
-        drawerColors.add(new Color("Black", "#000000"));
-        drawerColors.add(new Color("White", "#FFFFFF"));
-        drawerColors.add(new Color("Red", "#F44336"));
-        drawerColors.add(new Color("Pink", "#E91E63"));
-        drawerColors.add(new Color("Purple", "#9C27B0"));
-        drawerColors.add(new Color("Deep Purple", "#673AB7"));
-        drawerColors.add(new Color("Indigo", "#3F51B5"));
-        drawerColors.add(new Color("Blue", "#2196F3"));
-        drawerColors.add(new Color("Light Blue", "#03A9F4"));
-        drawerColors.add(new Color("Cyan", "#00BCD4"));
-        drawerColors.add(new Color("Teal", "#009688"));
-        drawerColors.add(new Color("Green", "#4CAF50"));
-        drawerColors.add(new Color("Light Green", "#8BC34A"));
-        drawerColors.add(new Color("Lime", "#CDDC39"));
-        drawerColors.add(new Color("Yellow", "#FFEB3B"));
-        drawerColors.add(new Color("Amber", "#FFC107"));
-        drawerColors.add(new Color("Orange", "#FF9800"));
-        drawerColors.add(new Color("Deep Orange", "#FF5722"));
-        drawerColors.add(new Color("Brown", "#795548"));
-        drawerColors.add(new Color("Grey", "#9E9E9E"));
-        drawerColors.add(new Color("Blue Grey", "#607D8B"));
+        drawerColors.add(new Color("Black", "#000000", 0xFF000000));
+        drawerColors.add(new Color("White", "#FFFFFF", 0xFFFFFFFF));
+        drawerColors.add(new Color("Red", "#F44336", 0xFFF44336));
+        drawerColors.add(new Color("Pink", "#E91E63", 0xFFE91E63));
+        drawerColors.add(new Color("Purple", "#9C27B0", 0xFF9C27B0));
+        drawerColors.add(new Color("Deep Purple", "#673AB7", 0xFF673AB7));
+        drawerColors.add(new Color("Indigo", "#3F51B5", 0xFF3F51B5));
+        drawerColors.add(new Color("Blue", "#2196F3", 0xFF2196F3));
+        drawerColors.add(new Color("Light Blue", "#03A9F4", 0xFF03A9F4));
+        drawerColors.add(new Color("Cyan", "#00BCD4", 0xFF00BCD4));
+        drawerColors.add(new Color("Teal", "#009688", 0xFF009688));
+        drawerColors.add(new Color("Green", "#4CAF50", 0xFF4CAF50));
+        drawerColors.add(new Color("Light Green", "#8BC34A", 0xFF8BC34A));
+        drawerColors.add(new Color("Lime", "#CDDC39", 0xFFCDDC39));
+        drawerColors.add(new Color("Yellow", "#FFEB3B", 0xFFFFEB3B));
+        drawerColors.add(new Color("Amber", "#FFC107", 0xFFFFC107));
+        drawerColors.add(new Color("Orange", "#FF9800", 0xFFFF9800));
+        drawerColors.add(new Color("Deep Orange", "#FF5722", 0xFFFF5722));
+        drawerColors.add(new Color("Brown", "#795548", 0xFF795548));
+        drawerColors.add(new Color("Grey", "#9E9E9E", 0xFF9E9E9E));
+        drawerColors.add(new Color("Blue Grey", "#607D8B", 0xFF607D8B));
 
         //create brushes
         smallBrush = 10;
