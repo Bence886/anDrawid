@@ -88,8 +88,8 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/brushSizes"
             android:choiceMode="singleChoice"
-            android:verticalSpacing="1dp"
-            android:horizontalSpacing="1dp"
+            android:verticalSpacing="2dp"
+            android:horizontalSpacing="2dp"
             android:background="#FFFFFF" />
     </RelativeLayout>
 

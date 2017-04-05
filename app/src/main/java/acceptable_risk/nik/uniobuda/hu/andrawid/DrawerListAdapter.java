@@ -7,10 +7,12 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.shapes.Shape;
 import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -58,17 +60,17 @@ public class DrawerListAdapter extends BaseAdapter {
         convertView.setBackgroundColor(android.graphics.Color.parseColor(holder.color));
         //((TextView)convertView).setText(holder.text);
         return convertView;*/
-
         ImageView shape = (ImageView) convertView;
         if(shape==null){
             shape= (ImageView) View.inflate(parent.getContext(), R.layout.color_layout, null);
         }
         Color color = buttonNames.get(position);
         if (color.colorint == selectedNum){ //selected color
-            shape.getDrawable().setColorFilter(color.colorint, PorterDuff.Mode.DARKEN);
+            shape.setImageResource(R.drawable.selected_color);
         }else { //not selected colors
-            shape.getDrawable().setColorFilter(color.colorint, PorterDuff.Mode.ADD);
+            shape.setImageResource(R.drawable.color);
         }
+        shape.getDrawable().setColorFilter(color.colorint, PorterDuff.Mode.ADD);
 
         return shape;
     }
