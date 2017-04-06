@@ -60,18 +60,22 @@ public class DrawerListAdapter extends BaseAdapter {
         convertView.setBackgroundColor(android.graphics.Color.parseColor(holder.color));
         //((TextView)convertView).setText(holder.text);
         return convertView;*/
+
         ImageView shape = (ImageView) convertView;
         if(shape==null){
             shape= (ImageView) View.inflate(parent.getContext(), R.layout.color_layout, null);
         }
+
         Color color = buttonNames.get(position);
+
         if (color.colorint == selectedNum){ //selected color
             shape.setImageResource(R.drawable.selected_color);
         }else { //not selected colors
             shape.setImageResource(R.drawable.color);
         }
-        shape.getDrawable().setColorFilter(color.colorint, PorterDuff.Mode.ADD);
 
+        shape.getDrawable().setColorFilter(color.colorint, PorterDuff.Mode.ADD);
+        shape.setAdjustViewBounds(true);
         return shape;
     }
 }
