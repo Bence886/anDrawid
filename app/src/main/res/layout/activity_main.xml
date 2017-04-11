@@ -10,6 +10,14 @@
     http://codetheory.in/android-navigation-drawer/
     https://developer.android.com/training/implementing-navigation/nav-drawer.html
     -->
+   <FrameLayout
+       android:elevation="100dp"
+       android:id="@+id/fragment_container"
+       android:layout_height="match_parent"
+       android:layout_width="match_parent">
+
+   </FrameLayout>
+
     <RelativeLayout
         android:layout_width="280dp"
         android:layout_height="match_parent"
@@ -91,6 +99,12 @@
             android:verticalSpacing="2dp"
             android:horizontalSpacing="2dp"
             android:background="#FFFFFF" />
+        <Button
+            android:layout_alignBottom="@id/drawerList"
+            android:id="@+id/addNewColor_btn"
+            android:text="New Color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 
     <LinearLayout

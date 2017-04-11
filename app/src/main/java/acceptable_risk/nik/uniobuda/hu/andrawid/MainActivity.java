@@ -2,7 +2,10 @@ package acceptable_risk.nik.uniobuda.hu.andrawid;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 
 import android.hardware.Sensor;
@@ -18,17 +21,12 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 import java.util.Date;
-import java.util.StringTokenizer;
 import java.util.UUID;
-import java.util.regex.Matcher;
 
 public class MainActivity extends AppCompatActivity {
     //sensor variables
@@ -41,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     Date Start;
 
     DrawingView drawingView;
-    Button small_Button, medium_Button, large_Button, new_Button, save_Button, load_Button;
+    Button small_Button, medium_Button, large_Button, new_Button, save_Button, load_Button, newColor_Button;
     float smallBrush, mediumBrush, largeBrush;
     GridView drawerList;
     RelativeLayout drawer;
@@ -188,6 +186,16 @@ public class MainActivity extends AppCompatActivity {
                 saveDialog.show();
             }
         });
+
+        newColor_Button = (Button) findViewById(R.id.addNewColor_btn);
+        newColor_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), ColorPickerActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
         sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
     }
 
@@ -214,12 +222,31 @@ public class MainActivity extends AppCompatActivity {
         drawerColors.add(new Color("Deep Orange", "#FF5722", 0xFFFF5722));
         drawerColors.add(new Color("Brown", "#795548", 0xFF795548));
         drawerColors.add(new Color("Grey", "#9E9E9E", 0xFF9E9E9E));
-        drawerColors.add(new Color("Blue Grey", "#607D8B", 0xFF607D8B));
+        drawerColors.add(new Color("Blue Grey", "#607D8B", 0xFF607D8B)); //0xFF607D8B
 
         //create brushes
         smallBrush = 10;
         mediumBrush = 20;
         largeBrush = 30;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==RESULT_OK && resultCode == RESULT_OK && data != null) {
+            int a, r, g, b;
+            a=data.getIntExtra("A", 0);
+            r=data.getIntExtra("R", 0);
+            g=data.getIntExtra("G", 0);
+            b=data.getIntExtra("B", 0);
+            String as = Integer.toHexString(a);
+            String rs = Integer.toHexString(r);
+            String gs = Integer.toHexString(g);
+            String bs = Integer.toHexString(b);
+            int color = android.graphics.Color.parseColor("#"+as+rs+gs+bs);
+            Color nc = new Color("#"+as+rs+gs+bs, "#"+as+rs+gs+bs, color);
+            drawerColors.add(nc);
+            drawer.invalidate();
+        }
     }
 
     @Override
