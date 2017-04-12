@@ -20,10 +20,7 @@ class Color {
     }
     public Color(int a, int r, int g, int b)
     {
-        if (a==0) a=1;
-        if (r==0) r=1;
-        if (g==0) g=1;
-        if (b==0) b=1;
+        if (a<50) a=17;
         colorint=android.graphics.Color.argb(a, r, g, b);
         text = "#"+Integer.toHexString(colorint);
         color = text;
