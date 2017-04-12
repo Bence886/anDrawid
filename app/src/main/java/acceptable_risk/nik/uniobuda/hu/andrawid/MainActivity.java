@@ -240,12 +240,12 @@ public class MainActivity extends AppCompatActivity {
             b=data.getIntExtra("B", 0);
             Color nc = new Color(a, r, g, b);
             drawerColors.add(nc);
-
             drawingView.setColor(nc.color);
             ((DrawerListAdapter) drawerList.getAdapter()).selectedNum = drawerColors.get(drawerColors.size()-1).colorint;
+            ((DrawerListAdapter) drawerList.getAdapter()).notifyDataSetInvalidated();
             Toast.makeText(getBaseContext(), nc.text, Toast.LENGTH_SHORT).show();
 
-            drawerLayout.closeDrawers();
+            //drawerLayout.closeDrawers();
         }
     }
 

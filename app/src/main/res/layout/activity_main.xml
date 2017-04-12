@@ -90,22 +90,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
         </LinearLayout>
-        <GridView
-            android:id="@+id/drawerList"
-            android:numColumns="4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/brushSizes"
-            android:choiceMode="singleChoice"
-            android:verticalSpacing="2dp"
-            android:horizontalSpacing="2dp"
-            android:background="#FFFFFF" />
-        <android.support.v7.widget.AppCompatButton
-            android:layout_below="@id/drawerList"
-            android:id="@+id/addNewColor_btn"
-            android:text="New Color"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_below="@+id/brushSizes"
+           android:orientation="vertical">
+           <GridView
+               android:id="@+id/drawerList"
+               android:numColumns="4"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:layout_below="@+id/brushSizes"
+               android:choiceMode="singleChoice"
+               android:verticalSpacing="2dp"
+               android:horizontalSpacing="2dp"
+               android:background="#FFFFFF" />
+           <android.support.v7.widget.AppCompatButton
+               android:layout_below="@id/drawerList"
+               android:id="@+id/addNewColor_btn"
+               android:layout_weight="0"
+               android:text="New Color"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content" />
+       </LinearLayout>
     </RelativeLayout>
 
     <LinearLayout

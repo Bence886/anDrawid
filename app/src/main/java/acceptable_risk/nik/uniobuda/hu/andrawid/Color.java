@@ -20,8 +20,12 @@ class Color {
     }
     public Color(int a, int r, int g, int b)
     {
-        text = "#"+Integer.toHexString(a)+Integer.toHexString(r)+Integer.toHexString(g)+Integer.toHexString(b);
+        if (a==0) a=1;
+        if (r==0) r=1;
+        if (g==0) g=1;
+        if (b==0) b=1;
+        colorint=android.graphics.Color.argb(a, r, g, b);
+        text = "#"+Integer.toHexString(colorint);
         color = text;
-        colorint = (a & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 16 | (b & 0xff);
     }
 }

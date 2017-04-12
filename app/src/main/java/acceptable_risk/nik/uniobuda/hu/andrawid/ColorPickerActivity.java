@@ -19,7 +19,7 @@ public class ColorPickerActivity extends AppCompatActivity {
     ImageView color;
     SeekBar S_A, S_R, S_G, S_B;
 
-    int a=255, r=0, g=0, b=0;
+    int a=255, r=1, g=1, b=1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
