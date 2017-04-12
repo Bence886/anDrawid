@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -183,7 +184,6 @@ public class MainActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
-                saveDialog.show();
             }
         });
 
@@ -232,20 +232,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode==RESULT_OK && resultCode == RESULT_OK && data != null) {
+        if (requestCode==1 && resultCode == RESULT_OK && data != null) {
             int a, r, g, b;
             a=data.getIntExtra("A", 0);
             r=data.getIntExtra("R", 0);
             g=data.getIntExtra("G", 0);
             b=data.getIntExtra("B", 0);
-            String as = Integer.toHexString(a);
-            String rs = Integer.toHexString(r);
-            String gs = Integer.toHexString(g);
-            String bs = Integer.toHexString(b);
-            int color = android.graphics.Color.parseColor("#"+as+rs+gs+bs);
-            Color nc = new Color("#"+as+rs+gs+bs, "#"+as+rs+gs+bs, color);
+            Color nc = new Color(a, r, g, b);
             drawerColors.add(nc);
-            drawer.invalidate();
+
+            drawingView.setColor(nc.color);
+            ((DrawerListAdapter) drawerList.getAdapter()).selectedNum = drawerColors.get(drawerColors.size()-1).colorint;
+            Toast.makeText(getBaseContext(), nc.text, Toast.LENGTH_SHORT).show();
+
+            drawerLayout.closeDrawers();
         }
     }
 

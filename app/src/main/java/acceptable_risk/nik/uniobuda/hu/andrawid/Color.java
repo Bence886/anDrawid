@@ -18,4 +18,10 @@ class Color {
     public Color()
     {
     }
+    public Color(int a, int r, int g, int b)
+    {
+        text = "#"+Integer.toHexString(a)+Integer.toHexString(r)+Integer.toHexString(g)+Integer.toHexString(b);
+        color = text;
+        colorint = (a & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 16 | (b & 0xff);
+    }
 }

@@ -22,6 +22,7 @@
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:id="@+id/drawerPane"
+        android:background="#FFFFFFFF"
         android:layout_gravity="start">
 
         <RelativeLayout
@@ -42,8 +43,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="42dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@+id/drawerImage"
+                android:layout_marginStart="15dp"
+                android:layout_toEndOf="@+id/drawerImage"
                 android:orientation="vertical" >
 
                 <TextView
@@ -73,17 +74,17 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:background="#ffffffff">
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/smallBrush"
                 android:text="Small"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/mediumBrush"
                 android:text="Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/largeBrush"
                 android:text="Large"
                 android:layout_width="wrap_content"
@@ -93,14 +94,14 @@
             android:id="@+id/drawerList"
             android:numColumns="4"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/brushSizes"
             android:choiceMode="singleChoice"
             android:verticalSpacing="2dp"
             android:horizontalSpacing="2dp"
             android:background="#FFFFFF" />
-        <Button
-            android:layout_alignBottom="@id/drawerList"
+        <android.support.v7.widget.AppCompatButton
+            android:layout_below="@id/drawerList"
             android:id="@+id/addNewColor_btn"
             android:text="New Color"
             android:layout_width="match_parent"
@@ -114,15 +115,15 @@
 
         <LinearLayout
             android:gravity="center"
+            android:id="@+id/buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/buttonNew"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="New"/>
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/buttonSave"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -132,7 +133,7 @@
         <acceptable_risk.nik.uniobuda.hu.andrawid.DrawingView
             android:id="@+id/drawingView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_marginBottom="3dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
