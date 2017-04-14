@@ -313,9 +313,6 @@ public class MainActivity extends AppCompatActivity {
                     newX=CursorX+xVelocity/div;
                     newY=CursorY+yVelocity/div;
 
-                    Log.d("--!--", String.valueOf(newX) + " , " + String.valueOf(newY));
-
-
                     //if the cursor stays in the window
                     if (newX >= 0 && newY >= 0 && newX <= width && newY <= height){
                         drawingView.drawFromTo(CursorX, CursorY, newX, newY);
