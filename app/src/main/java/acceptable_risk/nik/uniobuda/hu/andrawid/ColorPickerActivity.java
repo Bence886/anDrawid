@@ -18,6 +18,13 @@ import android.widget.SeekBar;
  * Created by tbenc on 2017. 04. 11..
  */
 
+
+
+//
+//           BackupServicekey
+//  AEdPqrEAAAAIbjXIchngK_AHGHIMqlX14Bmaccz_lycvj_mP4Q
+//
+
 public class ColorPickerActivity extends AppCompatActivity{
 
     Button cancel_btn, ok_btn;
