@@ -34,6 +34,7 @@ public class PaymentFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         Intent serviceIntent =
                 new Intent("com.android.vending.billing.InAppBillingService.BIND");
         serviceIntent.setPackage("com.android.vending");
@@ -52,7 +53,6 @@ public class PaymentFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         //TODO: getViews here
-        
         SuccessfulPayment();
     }
 
