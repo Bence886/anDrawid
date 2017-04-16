@@ -1,9 +1,13 @@
 package acceptable_risk.nik.uniobuda.hu.andrawid;
 
 import android.app.Fragment;
+import android.app.backup.BackupAgent;
+import android.app.backup.BackupDataInput;
+import android.app.backup.BackupDataOutput;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,6 +17,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+
+import java.io.IOException;
 
 /**
  * Created by tbenc on 2017. 04. 11..
@@ -67,5 +73,17 @@ public class ColorPickerActivity extends AppCompatActivity{
                 finish();
             }
         });
+    }
+
+    BackupAgent backup = new BackupAgent() {
+        @Override
+        public void onBackup(ParcelFileDescriptor oldState, BackupDataOutput data, ParcelFileDescriptor newState) throws IOException {
+            
+        }
+
+        @Override
+        public void onRestore(BackupDataInput data, int appVersionCode, ParcelFileDescriptor newState) throws IOException {
+
+        }
     }
 }
