@@ -85,5 +85,5 @@ public class ColorPickerActivity extends AppCompatActivity{
         public void onRestore(BackupDataInput data, int appVersionCode, ParcelFileDescriptor newState) throws IOException {
 
         }
-    }
+    };
 }

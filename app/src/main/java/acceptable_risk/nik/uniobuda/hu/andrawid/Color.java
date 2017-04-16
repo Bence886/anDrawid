@@ -25,4 +25,15 @@ class Color {
         text = "#"+Integer.toHexString(colorint);
         color = text;
     }
+
+    public String ToFile()
+    {
+        return text+","+color+","+String.valueOf(colorint);
+    }
+
+    public static Color FromFile(String value)
+    {
+        String[] splitted = value.split(",");
+        return new Color(splitted[0], splitted[1],Integer.valueOf(splitted[2]));
+    }
 }

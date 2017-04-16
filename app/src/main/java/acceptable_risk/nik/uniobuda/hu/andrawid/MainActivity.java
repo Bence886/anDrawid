@@ -24,6 +24,11 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import java.util.Date;
@@ -38,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     float xVelocity=0, yVelocity=0;
     int div =100; //divide the phone movement
     Date Start;
+    String FILENAME = "CustomCOlors";
+
+    boolean firstStart=true;
 
     DrawingView drawingView;
     Button small_Button, medium_Button, large_Button, new_Button, save_Button, load_Button, newColor_Button;
@@ -202,27 +210,66 @@ public class MainActivity extends AppCompatActivity {
     private void createDrawerColors() {
         drawerColors = new ArrayList<Color>();
         //add colors
-        drawerColors.add(new Color("Black", "#000000", 0xFF000000));
-        drawerColors.add(new Color("White", "#FFFFFF", 0xFFFFFFFF));
-        drawerColors.add(new Color("Red", "#F44336", 0xFFF44336));
-        drawerColors.add(new Color("Pink", "#E91E63", 0xFFE91E63));
-        drawerColors.add(new Color("Purple", "#9C27B0", 0xFF9C27B0));
-        drawerColors.add(new Color("Deep Purple", "#673AB7", 0xFF673AB7));
-        drawerColors.add(new Color("Indigo", "#3F51B5", 0xFF3F51B5));
-        drawerColors.add(new Color("Blue", "#2196F3", 0xFF2196F3));
-        drawerColors.add(new Color("Light Blue", "#03A9F4", 0xFF03A9F4));
-        drawerColors.add(new Color("Cyan", "#00BCD4", 0xFF00BCD4));
-        drawerColors.add(new Color("Teal", "#009688", 0xFF009688));
-        drawerColors.add(new Color("Green", "#4CAF50", 0xFF4CAF50));
-        drawerColors.add(new Color("Light Green", "#8BC34A", 0xFF8BC34A));
-        drawerColors.add(new Color("Lime", "#CDDC39", 0xFFCDDC39));
-        drawerColors.add(new Color("Yellow", "#FFEB3B", 0xFFFFEB3B));
-        drawerColors.add(new Color("Amber", "#FFC107", 0xFFFFC107));
-        drawerColors.add(new Color("Orange", "#FF9800", 0xFFFF9800));
-        drawerColors.add(new Color("Deep Orange", "#FF5722", 0xFFFF5722));
-        drawerColors.add(new Color("Brown", "#795548", 0xFF795548));
-        drawerColors.add(new Color("Grey", "#9E9E9E", 0xFF9E9E9E));
-        drawerColors.add(new Color("Blue Grey", "#607D8B", 0xFF607D8B)); //0xFF607D8B
+
+        try {
+            byte[] buffer = new byte[1024];
+            int len;
+            FileInputStream fis = openFileInput(FILENAME);
+            len = fis.read(buffer);
+            fis.close();
+            String in =new String(buffer, 0, len);
+            String [] asd = in.split(":");
+            firstStart = Boolean.valueOf(asd[0]);
+            String[] splitted = asd[1].split("_");
+            for (int i = 0; i<splitted.length;i++){
+                drawerColors.add(Color.FromFile(splitted[i]));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (firstStart) {
+            drawerColors.add(new Color("Black", "#000000", 0xFF000000));
+            drawerColors.add(new Color("White", "#FFFFFF", 0xFFFFFFFF));
+            drawerColors.add(new Color("Red", "#F44336", 0xFFF44336));
+            drawerColors.add(new Color("Pink", "#E91E63", 0xFFE91E63));
+            drawerColors.add(new Color("Purple", "#9C27B0", 0xFF9C27B0));
+            drawerColors.add(new Color("Deep Purple", "#673AB7", 0xFF673AB7));
+            drawerColors.add(new Color("Indigo", "#3F51B5", 0xFF3F51B5));
+            drawerColors.add(new Color("Blue", "#2196F3", 0xFF2196F3));
+            drawerColors.add(new Color("Light Blue", "#03A9F4", 0xFF03A9F4));
+            drawerColors.add(new Color("Cyan", "#00BCD4", 0xFF00BCD4));
+            drawerColors.add(new Color("Teal", "#009688", 0xFF009688));
+            drawerColors.add(new Color("Green", "#4CAF50", 0xFF4CAF50));
+            drawerColors.add(new Color("Light Green", "#8BC34A", 0xFF8BC34A));
+            drawerColors.add(new Color("Lime", "#CDDC39", 0xFFCDDC39));
+            drawerColors.add(new Color("Yellow", "#FFEB3B", 0xFFFFEB3B));
+            drawerColors.add(new Color("Amber", "#FFC107", 0xFFFFC107));
+            drawerColors.add(new Color("Orange", "#FF9800", 0xFFFF9800));
+            drawerColors.add(new Color("Deep Orange", "#FF5722", 0xFFFF5722));
+            drawerColors.add(new Color("Brown", "#795548", 0xFF795548));
+            drawerColors.add(new Color("Grey", "#9E9E9E", 0xFF9E9E9E));
+            drawerColors.add(new Color("Blue Grey", "#607D8B", 0xFF607D8B)); //0xFF607D8B
+            File dir = getFilesDir();
+            File file = new File(dir, FILENAME);
+            file.delete();
+            try {
+                FileOutputStream fos = openFileOutput(FILENAME, MODE_PRIVATE);
+                String out="1:";
+                for (int i = 0; i<drawerColors.size(); i++)
+                {
+                    out+=drawerColors.get(i).ToFile()+"_";
+                }
+                fos.write(out.getBytes());
+                fos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         //create brushes
         smallBrush = 10;
@@ -244,7 +291,17 @@ public class MainActivity extends AppCompatActivity {
             ((DrawerListAdapter) drawerList.getAdapter()).selectedNum = drawerColors.get(drawerColors.size()-1).colorint;
             ((DrawerListAdapter) drawerList.getAdapter()).notifyDataSetInvalidated();
             Toast.makeText(getBaseContext(), nc.text, Toast.LENGTH_SHORT).show();
-
+            try {
+                FileOutputStream fos = openFileOutput(FILENAME, MODE_APPEND);
+                String out="";
+                out+=nc.ToFile()+"_";
+                fos.write(out.getBytes());
+                fos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             //drawerLayout.closeDrawers();
         }
     }
@@ -268,6 +325,11 @@ public class MainActivity extends AppCompatActivity {
 
         //unregister sensor listener at app pause
         sensorManager.unregisterListener(sensorsListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     SensorEventListener sensorsListener = new SensorEventListener() {
