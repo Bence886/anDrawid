@@ -27,9 +27,9 @@ public class ColorPickerFragment extends Fragment {
     int a=255, r=1, g=1, b=1;
 
 
-    public static ColorPickerFragment newInstance(Bundle arg) {
+    public static ColorPickerFragment newInstance() {
         
-        Bundle args =arg;
+        Bundle args = new Bundle();
         
         ColorPickerFragment fragment = new ColorPickerFragment();
         fragment.setArguments(args);
