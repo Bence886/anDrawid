@@ -24,7 +24,7 @@ public class DrawingView extends View {
     private Paint paint, canvasPaint;
     private Canvas canvas;
     private Bitmap bmp;
-    private float brushSize;
+    public float brushSize;
 
     public DrawingView(Context context, AttributeSet attrs) {
         super(context, attrs);
