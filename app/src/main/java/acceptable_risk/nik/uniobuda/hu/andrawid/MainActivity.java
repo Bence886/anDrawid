@@ -16,6 +16,7 @@ import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -43,12 +44,13 @@ public class MainActivity extends AppCompatActivity {
     float xVelocity=0, yVelocity=0;
     int div =100; //divide the phone movement
     Date Start;
-    String FILENAME = "CustomCOlors";
+    String FILENAME = "CustomColors";
 
     boolean firstStart=true;
 
     DrawingView drawingView;
-    Button small_Button, medium_Button, large_Button, new_Button, save_Button, load_Button, newColor_Button;
+    Button small_Button, medium_Button, large_Button, new_Button, save_Button, newColor_Button;
+    ImageButton DrawerOpen_Button;
     float smallBrush, mediumBrush, largeBrush;
     GridView drawerList;
     RelativeLayout drawer;
@@ -95,6 +97,15 @@ public class MainActivity extends AppCompatActivity {
         //create new adapter for listView
         DrawerListAdapter adapter =new DrawerListAdapter(this, drawerColors);
         drawerList.setAdapter(adapter);
+
+        DrawerOpen_Button = (ImageButton) findViewById(R.id.OpenDrawerButton);
+        DrawerOpen_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(Gravity.START);
+            }
+        });
+
 
         //Color picker
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
