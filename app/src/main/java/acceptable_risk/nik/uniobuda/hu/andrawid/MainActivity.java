@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     float elozoY = 0;
     int div =100; //divide the phone movement
     Date Start;
-    String FILENAME = "CustomCOlors";
+    String FILENAME = "CustomColors";
 
     boolean firstStart=true;
 
@@ -372,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
 
                     newX = CursorX + xVelocity / div;
                     newY = CursorY + yVelocity / div;
-                    
+
                     //if the cursor stays in the window
                     if (newX >= 0 && newY >= 0 && newX <= width && newY <= height) {
                         drawingView.drawFromTo(CursorX, CursorY, newX, newY);
