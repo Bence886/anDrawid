@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 
@@ -19,7 +17,6 @@ import android.hardware.SensorManager;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,8 +26,6 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -50,9 +45,6 @@ public class MainActivity extends AppCompatActivity {
     float elozoY = 0;
     int div =100; //divide the phone movement
     Date Start;
-    String FILENAME = "CustomColors";
-
-    boolean firstStart=true;
 
     DrawingView drawingView;
     Button small_Button, medium_Button, large_Button, new_Button, save_Button, newColor_Button;
@@ -63,13 +55,16 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
 
     ArrayList<Color> drawerColors;
+    FileReadWrite fileReadWrite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        fileReadWrite = new FileReadWrite(getBaseContext());
         createDrawerColors();
+
 
         //Get views from xml
         drawer = (RelativeLayout) findViewById(R.id.drawerPane);
@@ -236,26 +231,9 @@ public class MainActivity extends AppCompatActivity {
         drawerColors = new ArrayList<Color>();
         //add colors
 
-        try {
-            byte[] buffer = new byte[1024];
-            int len;
-            FileInputStream fis = openFileInput(FILENAME);
-            len = fis.read(buffer);
-            fis.close();
-            String in =new String(buffer, 0, len);
-            String [] asd = in.split(":");
-            firstStart = Boolean.valueOf(asd[0]);
-            String[] splitted = asd[1].split("_");
-            for (int i = 0; i<splitted.length;i++){
-                drawerColors.add(Color.FromFile(splitted[i]));
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        drawerColors = fileReadWrite.Read();
 
-        if (firstStart) {
+        if (drawerColors.size()==0) {
             drawerColors.add(new Color("Black", "#000000", 0xFF000000));
             drawerColors.add(new Color("White", "#FFFFFF", 0xFFFFFFFF));
             drawerColors.add(new Color("Red", "#F44336", 0xFFF44336));
@@ -277,23 +255,8 @@ public class MainActivity extends AppCompatActivity {
             drawerColors.add(new Color("Brown", "#795548", 0xFF795548));
             drawerColors.add(new Color("Grey", "#9E9E9E", 0xFF9E9E9E));
             drawerColors.add(new Color("Blue Grey", "#607D8B", 0xFF607D8B)); //0xFF607D8B
-            File dir = getFilesDir();
-            File file = new File(dir, FILENAME);
-            file.delete();
-            try {
-                FileOutputStream fos = openFileOutput(FILENAME, MODE_PRIVATE);
-                String out="1:";
-                for (int i = 0; i<drawerColors.size(); i++)
-                {
-                    out+=drawerColors.get(i).ToFile()+"_";
-                }
-                fos.write(out.getBytes());
-                fos.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+            fileReadWrite.WriteAll(drawerColors);
         }
 
         //create brushes
@@ -316,17 +279,9 @@ public class MainActivity extends AppCompatActivity {
             ((DrawerListAdapter) drawerList.getAdapter()).selectedNum = drawerColors.get(drawerColors.size()-1).colorint;
             ((DrawerListAdapter) drawerList.getAdapter()).notifyDataSetInvalidated();
             Toast.makeText(getBaseContext(), nc.text, Toast.LENGTH_SHORT).show();
-            try {
-                FileOutputStream fos = openFileOutput(FILENAME, MODE_APPEND);
-                String out="";
-                out+=nc.ToFile()+"_";
-                fos.write(out.getBytes());
-                fos.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+            fileReadWrite.Write(nc);
+
             //drawerLayout.closeDrawers();
         }
     }
