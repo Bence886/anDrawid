@@ -1,24 +1,20 @@
 package acceptable_risk.nik.uniobuda.hu.andrawid;
 
-import android.content.Intent;
-
-import java.math.BigInteger;
-
-class Color {
+class MyColor {
     String text;
     String color;
     int colorint;
 
-    public Color(String text, String color, int colorint)
+    public MyColor(String text, String color, int colorint)
     {
         this.text = text;
         this.color = color;
         this.colorint = colorint;
     }
-    public Color()
+    public MyColor()
     {
     }
-    public Color(int a, int r, int g, int b)
+    public MyColor(int a, int r, int g, int b)
     {
         if (a<50) a=17;
         colorint=android.graphics.Color.argb(a, r, g, b);
@@ -31,9 +27,9 @@ class Color {
         return text+","+color+","+String.valueOf(colorint);
     }
 
-    public static Color FromFile(String value)
+    public static MyColor FromFile(String value)
     {
         String[] splitted = value.split(",");
-        return new Color(splitted[0], splitted[1],Integer.valueOf(splitted[2]));
+        return new MyColor(splitted[0], splitted[1],Integer.valueOf(splitted[2]));
     }
 }

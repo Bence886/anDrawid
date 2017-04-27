@@ -26,9 +26,6 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import java.util.Date;
@@ -54,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout drawer;
     DrawerLayout drawerLayout;
 
-    ArrayList<Color> drawerColors;
+    ArrayList<MyColor> drawerMyColors;
     FileReadWrite fileReadWrite;
 
     @Override
@@ -96,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //create new adapter for listView
-        DrawerListAdapter adapter =new DrawerListAdapter(this, drawerColors);
+        DrawerListAdapter adapter =new DrawerListAdapter(this, drawerMyColors);
         drawerList.setAdapter(adapter);
 
         DrawerOpen_Button = (ImageButton) findViewById(R.id.OpenDrawerButton);
@@ -108,14 +105,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //Color picker
+        //MyColor picker
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                drawingView.setColor(drawerColors.get(position).color);
-                ((DrawerListAdapter) parent.getAdapter()).selectedNum = drawerColors.get(position).colorint; //set the selected
+                drawingView.setColor(drawerMyColors.get(position).color);
+                ((DrawerListAdapter) parent.getAdapter()).selectedNum = drawerMyColors.get(position).colorint; //set the selected
                 ((DrawerListAdapter) parent.getAdapter()).notifyDataSetChanged(); //redraw list
-                Toast.makeText(view.getContext(), drawerColors.get(position).text, Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), drawerMyColors.get(position).text, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -228,35 +225,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createDrawerColors() {
-        drawerColors = new ArrayList<Color>();
+        drawerMyColors = new ArrayList<MyColor>();
         //add colors
 
-        drawerColors = fileReadWrite.Read();
+        drawerMyColors = fileReadWrite.Read();
 
-        if (drawerColors.size()==0) {
-            drawerColors.add(new Color("Black", "#000000", 0xFF000000));
-            drawerColors.add(new Color("White", "#FFFFFF", 0xFFFFFFFF));
-            drawerColors.add(new Color("Red", "#F44336", 0xFFF44336));
-            drawerColors.add(new Color("Pink", "#E91E63", 0xFFE91E63));
-            drawerColors.add(new Color("Purple", "#9C27B0", 0xFF9C27B0));
-            drawerColors.add(new Color("Deep Purple", "#673AB7", 0xFF673AB7));
-            drawerColors.add(new Color("Indigo", "#3F51B5", 0xFF3F51B5));
-            drawerColors.add(new Color("Blue", "#2196F3", 0xFF2196F3));
-            drawerColors.add(new Color("Light Blue", "#03A9F4", 0xFF03A9F4));
-            drawerColors.add(new Color("Cyan", "#00BCD4", 0xFF00BCD4));
-            drawerColors.add(new Color("Teal", "#009688", 0xFF009688));
-            drawerColors.add(new Color("Green", "#4CAF50", 0xFF4CAF50));
-            drawerColors.add(new Color("Light Green", "#8BC34A", 0xFF8BC34A));
-            drawerColors.add(new Color("Lime", "#CDDC39", 0xFFCDDC39));
-            drawerColors.add(new Color("Yellow", "#FFEB3B", 0xFFFFEB3B));
-            drawerColors.add(new Color("Amber", "#FFC107", 0xFFFFC107));
-            drawerColors.add(new Color("Orange", "#FF9800", 0xFFFF9800));
-            drawerColors.add(new Color("Deep Orange", "#FF5722", 0xFFFF5722));
-            drawerColors.add(new Color("Brown", "#795548", 0xFF795548));
-            drawerColors.add(new Color("Grey", "#9E9E9E", 0xFF9E9E9E));
-            drawerColors.add(new Color("Blue Grey", "#607D8B", 0xFF607D8B)); //0xFF607D8B
+        if (drawerMyColors.size()==0) {
+            drawerMyColors.add(new MyColor("Black", "#000000", 0xFF000000));
+            drawerMyColors.add(new MyColor("White", "#FFFFFF", 0xFFFFFFFF));
+            drawerMyColors.add(new MyColor("Red", "#F44336", 0xFFF44336));
+            drawerMyColors.add(new MyColor("Pink", "#E91E63", 0xFFE91E63));
+            drawerMyColors.add(new MyColor("Purple", "#9C27B0", 0xFF9C27B0));
+            drawerMyColors.add(new MyColor("Deep Purple", "#673AB7", 0xFF673AB7));
+            drawerMyColors.add(new MyColor("Indigo", "#3F51B5", 0xFF3F51B5));
+            drawerMyColors.add(new MyColor("Blue", "#2196F3", 0xFF2196F3));
+            drawerMyColors.add(new MyColor("Light Blue", "#03A9F4", 0xFF03A9F4));
+            drawerMyColors.add(new MyColor("Cyan", "#00BCD4", 0xFF00BCD4));
+            drawerMyColors.add(new MyColor("Teal", "#009688", 0xFF009688));
+            drawerMyColors.add(new MyColor("Green", "#4CAF50", 0xFF4CAF50));
+            drawerMyColors.add(new MyColor("Light Green", "#8BC34A", 0xFF8BC34A));
+            drawerMyColors.add(new MyColor("Lime", "#CDDC39", 0xFFCDDC39));
+            drawerMyColors.add(new MyColor("Yellow", "#FFEB3B", 0xFFFFEB3B));
+            drawerMyColors.add(new MyColor("Amber", "#FFC107", 0xFFFFC107));
+            drawerMyColors.add(new MyColor("Orange", "#FF9800", 0xFFFF9800));
+            drawerMyColors.add(new MyColor("Deep Orange", "#FF5722", 0xFFFF5722));
+            drawerMyColors.add(new MyColor("Brown", "#795548", 0xFF795548));
+            drawerMyColors.add(new MyColor("Grey", "#9E9E9E", 0xFF9E9E9E));
+            drawerMyColors.add(new MyColor("Blue Grey", "#607D8B", 0xFF607D8B)); //0xFF607D8B
 
-            fileReadWrite.WriteAll(drawerColors);
+            fileReadWrite.WriteAll(drawerMyColors);
         }
 
         //create brushes
@@ -273,10 +270,10 @@ public class MainActivity extends AppCompatActivity {
             r=data.getIntExtra("R", 0);
             g=data.getIntExtra("G", 0);
             b=data.getIntExtra("B", 0);
-            Color nc = new Color(a, r, g, b);
-            drawerColors.add(nc);
+            MyColor nc = new MyColor(a, r, g, b);
+            drawerMyColors.add(nc);
             drawingView.setColor(nc.color);
-            ((DrawerListAdapter) drawerList.getAdapter()).selectedNum = drawerColors.get(drawerColors.size()-1).colorint;
+            ((DrawerListAdapter) drawerList.getAdapter()).selectedNum = drawerMyColors.get(drawerMyColors.size()-1).colorint;
             ((DrawerListAdapter) drawerList.getAdapter()).notifyDataSetInvalidated();
             Toast.makeText(getBaseContext(), nc.text, Toast.LENGTH_SHORT).show();
 

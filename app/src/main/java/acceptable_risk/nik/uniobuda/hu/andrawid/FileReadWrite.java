@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import static android.content.Context.MODE_APPEND;
 import static android.content.Context.MODE_PRIVATE;
-import static android.provider.Telephony.Mms.Part.FILENAME;
 
 /**
  * Created by tbenc on 2017. 04. 27..
@@ -26,7 +25,7 @@ public class FileReadWrite {
         this.context = context;
     }
 
-    public void WriteAll(ArrayList<Color> drawerColors)
+    public void WriteAll(ArrayList<MyColor> drawerMyColors)
     {
         File dir = context.getFilesDir();
         File file = new File(dir, FILENAME);
@@ -34,9 +33,9 @@ public class FileReadWrite {
         try {
             FileOutputStream fos = context.openFileOutput(FILENAME, MODE_PRIVATE);
             String out="";
-            for (int i = 0; i<drawerColors.size(); i++)
+            for (int i = 0; i< drawerMyColors.size(); i++)
             {
-                out+=drawerColors.get(i).ToFile()+"_";
+                out+= drawerMyColors.get(i).ToFile()+"_";
             }
             fos.write(out.getBytes());
             fos.close();
@@ -47,9 +46,9 @@ public class FileReadWrite {
         }
     }
 
-    public ArrayList<Color> Read()
+    public ArrayList<MyColor> Read()
     {
-        ArrayList<Color> colors = new ArrayList<>();
+        ArrayList<MyColor> myColors = new ArrayList<>();
         boolean firstStart=false;
 
         try {
@@ -61,7 +60,7 @@ public class FileReadWrite {
             String in =new String(buffer, 0, len);
             String[] splitted = in.split("_");
             for (int i = 0; i<splitted.length;i++){
-                colors.add(Color.FromFile(splitted[i]));
+                myColors.add(MyColor.FromFile(splitted[i]));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -69,10 +68,10 @@ public class FileReadWrite {
             e.printStackTrace();
         }
 
-        return colors;
+        return myColors;
     }
 
-    public void Write(Color nc)
+    public void Write(MyColor nc)
     {
         try {
             FileOutputStream fos = context.openFileOutput(FILENAME, MODE_APPEND);

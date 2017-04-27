@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginTop="4dp"
-                android:text="Select a color and brush size to paint with"
+                android:text="Select a myColor and brush size to paint with"
                 android:textColor="#fff"
                 android:textSize="12sp" />
         </LinearLayout>
