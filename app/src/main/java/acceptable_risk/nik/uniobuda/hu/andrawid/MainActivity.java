@@ -1,11 +1,15 @@
 package acceptable_risk.nik.uniobuda.hu.andrawid;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 
 import android.hardware.Sensor;
@@ -178,6 +182,14 @@ public class MainActivity extends AppCompatActivity {
         save_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            1);
+                }
+
                 AlertDialog.Builder saveDialog = new AlertDialog.Builder(v.getContext());
                 saveDialog.setTitle("Save drawing");
                 saveDialog.setMessage("Save drawing to device Gallery?");
@@ -199,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         drawingView.destroyDrawingCache();
                     }
-                });
+                }).show();
                 saveDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int which){
                         dialog.cancel();
