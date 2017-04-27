@@ -7,8 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 /**
  * Created by tbenc on 2017. 04. 14..
@@ -19,8 +21,11 @@ public class ColorPickerFragment extends Fragment {
 
     ImageView color;
     SeekBar S_A, S_R, S_G, S_B;
+    EditText nameText;
+
 
     int a=255, r=1, g=1, b=1;
+    String name;
 
 
     public static ColorPickerFragment newInstance() {
@@ -50,6 +55,8 @@ public class ColorPickerFragment extends Fragment {
         S_G = (SeekBar) rootView.findViewById(R.id.g);
         S_B = (SeekBar) rootView.findViewById(R.id.b);
 
+        nameText = (EditText) rootView.findViewById(R.id.nameText);
+
         SeekBar.OnSeekBarChangeListener bar = new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -62,11 +69,14 @@ public class ColorPickerFragment extends Fragment {
                 if (seekBar == S_B)
                     b = progress;
 
+                name = nameText.getText().toString();
+
                 getArguments().clear();
                 getArguments().putInt("A", a);
                 getArguments().putInt("R", r);
                 getArguments().putInt("G", g);
                 getArguments().putInt("B", b);
+                getArguments().putString("name", name);
 
                 color.getDrawable().setColorFilter(new MyColor(a, r, g, b).colorint, PorterDuff.Mode.ADD);
             }

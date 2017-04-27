@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
             drawerMyColors.add(new MyColor("Deep Orange", 0xFFFF5722));
             drawerMyColors.add(new MyColor("Brown", 0xFF795548));
             drawerMyColors.add(new MyColor("Grey", 0xFF9E9E9E));
-            drawerMyColors.add(new MyColor("Blue Grey", 0xFF607D8B)); //0xFF607D8B
+            drawerMyColors.add(new MyColor("Blue Grey", 0xFF607D8B));
 
             fileReadWrite.WriteAll(drawerMyColors);
         }
@@ -266,18 +266,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode==1 && resultCode == RESULT_OK && data != null) {
             int a, r, g, b;
+            String name;
             a=data.getIntExtra("A", 0);
             r=data.getIntExtra("R", 0);
             g=data.getIntExtra("G", 0);
             b=data.getIntExtra("B", 0);
-            MyColor nc = new MyColor(a, r, g, b);
-            drawerMyColors.add(nc);
-            drawingView.setColor(nc.colorint);
+            name=data.getStringExtra("name");
+
+            MyColor newColor = new MyColor(a, r, g, b);
+            if (name!=null)
+                newColor.colorName=name;
+
+            drawerMyColors.add(newColor);
+            drawingView.setColor(newColor.colorint);
             ((DrawerListAdapter) drawerList.getAdapter()).selectedNum = drawerMyColors.get(drawerMyColors.size()-1).colorint;
             ((DrawerListAdapter) drawerList.getAdapter()).notifyDataSetInvalidated();
-            Toast.makeText(getBaseContext(), nc.colorName, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), newColor.colorName, Toast.LENGTH_SHORT).show();
 
-            fileReadWrite.Write(nc);
+            fileReadWrite.Write(newColor);
 
             //drawerLayout.closeDrawers();
         }

@@ -69,6 +69,7 @@ public class ColorPickerActivity extends AppCompatActivity{
                     output.putExtra("R", cpf.getArguments().getInt("R"));
                     output.putExtra("G", cpf.getArguments().getInt("G"));
                     output.putExtra("B", cpf.getArguments().getInt("B"));
+                    output.putExtra("name", cpf.getArguments().getString("name"));
                     setResult(RESULT_OK, output);
                     finish();
                 }else {
