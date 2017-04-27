@@ -66,11 +66,13 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:background="#ffffffff">
+
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/smallBrush"
-                android:text="Small"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:text="Small" />
+
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/mediumBrush"
                 android:text="Medium"
@@ -107,39 +109,48 @@
                android:layout_height="wrap_content" />
        </LinearLayout>
     </RelativeLayout>
-
-    <LinearLayout
+    <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/OpenDrawerButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@android:drawable/ic_menu_sort_by_size" />
+
         <LinearLayout
-            android:gravity="center"
             android:id="@+id/buttons"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_toEndOf="@+id/OpenDrawerButton">
+
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/buttonNew"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="New"/>
+                android:text="New" />
+
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/buttonSave"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Save"/>
+                android:text="Save" />
+
         </LinearLayout>
 
         <acceptable_risk.nik.uniobuda.hu.andrawid.DrawingView
+            android:layout_below="@+id/buttons"
             android:id="@+id/drawingView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:layout_marginBottom="3dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="3dp"
-            android:layout_weight="1"
             android:background="#FFFFFFFF"/>
-    </LinearLayout>
-
+    </RelativeLayout>
 </android.support.v4.widget.DrawerLayout>
