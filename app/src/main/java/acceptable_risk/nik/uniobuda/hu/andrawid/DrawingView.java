@@ -48,9 +48,9 @@ public class DrawingView extends View {
         canvas = new Canvas(bmp);
     }
 
-    public void setColor(String color)
+    public void setColor(int color)
     {
-        paint.setColor(Color.parseColor(color));
+        paint.setColor(color);
     }
 
     public void startNew(){
