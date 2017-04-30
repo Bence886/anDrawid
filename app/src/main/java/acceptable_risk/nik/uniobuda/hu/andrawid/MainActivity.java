@@ -1,11 +1,13 @@
 package acceptable_risk.nik.uniobuda.hu.andrawid;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.provider.MediaStore;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 
 import android.hardware.Sensor;
@@ -15,7 +17,7 @@ import android.hardware.SensorManager;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -32,28 +34,34 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
     //sensor variables
     private SensorManager sensorManager;
-    double ax,ay,az; //sensor x, y, z Acceleration
+    float ax,ay,az; //sensor x, y, z Acceleration
     float CursorX =500, CursorY=1000; //needs to be updated to the middle of the screen asap
     float height, width; //View width, height
     float xVelocity=0, yVelocity=0;
+    float elozoX = 0;
+    float elozoY = 0;
     int div =100; //divide the phone movement
     Date Start;
 
     DrawingView drawingView;
-    Button small_Button, medium_Button, large_Button, new_Button, save_Button, load_Button, newColor_Button;
+    Button small_Button, medium_Button, large_Button, new_Button, save_Button, newColor_Button;
+    ImageButton DrawerOpen_Button;
     float smallBrush, mediumBrush, largeBrush;
     GridView drawerList;
     RelativeLayout drawer;
     DrawerLayout drawerLayout;
 
-    ArrayList<Color> drawerColors;
+    ArrayList<MyColor> drawerMyColors;
+    FileReadWrite fileReadWrite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        fileReadWrite = new FileReadWrite(getBaseContext());
         createDrawerColors();
+
 
         //Get views from xml
         drawer = (RelativeLayout) findViewById(R.id.drawerPane);
@@ -85,17 +93,26 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //create new adapter for listView
-        DrawerListAdapter adapter =new DrawerListAdapter(this, drawerColors);
+        DrawerListAdapter adapter =new DrawerListAdapter(this, drawerMyColors);
         drawerList.setAdapter(adapter);
 
-        //Color picker
+        DrawerOpen_Button = (ImageButton) findViewById(R.id.OpenDrawerButton);
+        DrawerOpen_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(Gravity.START);
+            }
+        });
+
+
+        //MyColor picker
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                drawingView.setColor(drawerColors.get(position).color);
-                ((DrawerListAdapter) parent.getAdapter()).selectedNum = drawerColors.get(position).colorint; //set the selected
+                drawingView.setColor(drawerMyColors.get(position).colorint);
+                ((DrawerListAdapter) parent.getAdapter()).selectedNum = drawerMyColors.get(position).colorint; //set the selected
                 ((DrawerListAdapter) parent.getAdapter()).notifyDataSetChanged(); //redraw list
-                Toast.makeText(view.getContext(), drawerColors.get(position).text, Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), drawerMyColors.get(position).colorName, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -157,6 +174,14 @@ public class MainActivity extends AppCompatActivity {
         save_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            1);
+                }
+
                 AlertDialog.Builder saveDialog = new AlertDialog.Builder(v.getContext());
                 saveDialog.setTitle("Save drawing");
                 saveDialog.setMessage("Save drawing to device Gallery?");
@@ -178,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         drawingView.destroyDrawingCache();
                     }
-                });
+                }).show();
                 saveDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int which){
                         dialog.cancel();
@@ -200,29 +225,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createDrawerColors() {
-        drawerColors = new ArrayList<Color>();
+        drawerMyColors = new ArrayList<MyColor>();
         //add colors
-        drawerColors.add(new Color("Black", "#000000", 0xFF000000));
-        drawerColors.add(new Color("White", "#FFFFFF", 0xFFFFFFFF));
-        drawerColors.add(new Color("Red", "#F44336", 0xFFF44336));
-        drawerColors.add(new Color("Pink", "#E91E63", 0xFFE91E63));
-        drawerColors.add(new Color("Purple", "#9C27B0", 0xFF9C27B0));
-        drawerColors.add(new Color("Deep Purple", "#673AB7", 0xFF673AB7));
-        drawerColors.add(new Color("Indigo", "#3F51B5", 0xFF3F51B5));
-        drawerColors.add(new Color("Blue", "#2196F3", 0xFF2196F3));
-        drawerColors.add(new Color("Light Blue", "#03A9F4", 0xFF03A9F4));
-        drawerColors.add(new Color("Cyan", "#00BCD4", 0xFF00BCD4));
-        drawerColors.add(new Color("Teal", "#009688", 0xFF009688));
-        drawerColors.add(new Color("Green", "#4CAF50", 0xFF4CAF50));
-        drawerColors.add(new Color("Light Green", "#8BC34A", 0xFF8BC34A));
-        drawerColors.add(new Color("Lime", "#CDDC39", 0xFFCDDC39));
-        drawerColors.add(new Color("Yellow", "#FFEB3B", 0xFFFFEB3B));
-        drawerColors.add(new Color("Amber", "#FFC107", 0xFFFFC107));
-        drawerColors.add(new Color("Orange", "#FF9800", 0xFFFF9800));
-        drawerColors.add(new Color("Deep Orange", "#FF5722", 0xFFFF5722));
-        drawerColors.add(new Color("Brown", "#795548", 0xFF795548));
-        drawerColors.add(new Color("Grey", "#9E9E9E", 0xFF9E9E9E));
-        drawerColors.add(new Color("Blue Grey", "#607D8B", 0xFF607D8B)); //0xFF607D8B
+
+        drawerMyColors = fileReadWrite.Read();
+
+        if (drawerMyColors.size()==0) {
+            drawerMyColors.add(new MyColor("Black", 0xFF000000));
+            drawerMyColors.add(new MyColor("White", 0xFFFFFFFF));
+            drawerMyColors.add(new MyColor("Red", 0xFFF44336));
+            drawerMyColors.add(new MyColor("Pink", 0xFFE91E63));
+            drawerMyColors.add(new MyColor("Purple", 0xFF9C27B0));
+            drawerMyColors.add(new MyColor("Deep Purple", 0xFF673AB7));
+            drawerMyColors.add(new MyColor("Indigo", 0xFF3F51B5));
+            drawerMyColors.add(new MyColor("Blue", 0xFF2196F3));
+            drawerMyColors.add(new MyColor("Light Blue", 0xFF03A9F4));
+            drawerMyColors.add(new MyColor("Cyan", 0xFF00BCD4));
+            drawerMyColors.add(new MyColor("Teal", 0xFF009688));
+            drawerMyColors.add(new MyColor("Green", 0xFF4CAF50));
+            drawerMyColors.add(new MyColor("Light Green", 0xFF8BC34A));
+            drawerMyColors.add(new MyColor("Lime", 0xFFCDDC39));
+            drawerMyColors.add(new MyColor("Yellow", 0xFFFFEB3B));
+            drawerMyColors.add(new MyColor("Amber", 0xFFFFC107));
+            drawerMyColors.add(new MyColor("Orange", 0xFFFF9800));
+            drawerMyColors.add(new MyColor("Deep Orange", 0xFFFF5722));
+            drawerMyColors.add(new MyColor("Brown", 0xFF795548));
+            drawerMyColors.add(new MyColor("Grey", 0xFF9E9E9E));
+            drawerMyColors.add(new MyColor("Blue Grey", 0xFF607D8B));
+
+            fileReadWrite.WriteAll(drawerMyColors);
+        }
 
         //create brushes
         smallBrush = 10;
@@ -234,16 +266,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode==1 && resultCode == RESULT_OK && data != null) {
             int a, r, g, b;
+            String name;
             a=data.getIntExtra("A", 0);
             r=data.getIntExtra("R", 0);
             g=data.getIntExtra("G", 0);
             b=data.getIntExtra("B", 0);
-            Color nc = new Color(a, r, g, b);
-            drawerColors.add(nc);
-            drawingView.setColor(nc.color);
-            ((DrawerListAdapter) drawerList.getAdapter()).selectedNum = drawerColors.get(drawerColors.size()-1).colorint;
+            name=data.getStringExtra("name");
+
+            MyColor newColor = new MyColor(a, r, g, b);
+            if (name!=null)
+                newColor.colorName=name;
+
+            drawerMyColors.add(newColor);
+            drawingView.setColor(newColor.colorint);
+            ((DrawerListAdapter) drawerList.getAdapter()).selectedNum = drawerMyColors.get(drawerMyColors.size()-1).colorint;
             ((DrawerListAdapter) drawerList.getAdapter()).notifyDataSetInvalidated();
-            Toast.makeText(getBaseContext(), nc.text, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), newColor.colorName, Toast.LENGTH_SHORT).show();
+
+            fileReadWrite.Write(newColor);
 
             //drawerLayout.closeDrawers();
         }
@@ -259,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         //Sensor event listener register
-        sensorManager.registerListener(sensorsListener, sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION), SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(sensorsListener, sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION), SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     @Override
@@ -268,6 +308,11 @@ public class MainActivity extends AppCompatActivity {
 
         //unregister sensor listener at app pause
         sensorManager.unregisterListener(sensorsListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     SensorEventListener sensorsListener = new SensorEventListener() {
@@ -283,61 +328,59 @@ public class MainActivity extends AppCompatActivity {
             width=drawingView.getWidth();
 
             if (Start==null)
-            {//for the firs time
+            {//for the first time
                 Start=new Date(System.currentTimeMillis());
             }
 
-            float Elapsed = new Date().getTime() - Start.getTime(); //calculate time between event calls
+            float Elapsed = new Date(System.currentTimeMillis()).getTime() - Start.getTime(); //calculate time between event calls
 
-            if (event.sensor.getType()==Sensor.TYPE_LINEAR_ACCELERATION && height!=0){ //get LinearAcceleration values
-                ax=event.values[0];
-                ay=event.values[2];
-                az=event.values[2];
+            if (event.sensor.getType()==Sensor.TYPE_LINEAR_ACCELERATION && height!=0) { //get LinearAcceleration values
+                ax = event.values[0];
+                ay = event.values[1];
+                az = event.values[2];
 
                 //if the acceleration is faster than 0.5m/s^2
-                if ((Math.abs(ax)>1 || Math.abs(ay)>1) && Elapsed<1000) {
+                if ((Math.abs(ax) > 0.1 || Math.abs(ay) > 0.1) && Elapsed < 1000) {
 
-                    if (Math.abs(ax)>1){
-                        xVelocity+=(float)ax*Elapsed;}
-                    else{
-                        xVelocity=0;}
-                    if (Math.abs(ay)>1){
-                        yVelocity+=(float)ay*Elapsed;}
-                    else{
-                        yVelocity=0;}
+
+                    xVelocity += (float) 2 * ax * Elapsed;
+                    yVelocity += (float) 2 * ay * Elapsed;
+
 
                     //calculate X/Y Distance moved
                     //float newX = (CursorX + xVelocity/div);
                     //float newY = (CursorY + yVelocity/div);
 
-                    newX=CursorX+xVelocity/div;
-                    newY=CursorY+yVelocity/div;
-
-                    Log.d("--!--", String.valueOf(newX) + " , " + String.valueOf(newY));
-
+                    newX = CursorX + xVelocity / div;
+                    newY = CursorY + yVelocity / div;
 
                     //if the cursor stays in the window
-                    if (newX >= 0 && newY >= 0 && newX <= width && newY <= height){
+                    if (newX >= 0 && newY >= 0 && newX <= width && newY <= height) {
                         drawingView.drawFromTo(CursorX, CursorY, newX, newY);
                         //set new cursor position
-                        CursorX=newX;
-                        CursorY=newY;
-                    }else { //if not
-                        if (newX<0) newX=0;
-                        if (newX>width) newX=width;
-                        if (newY<0) newY=0;
-                        if (newY>height) newY=height;
+                        CursorX = newX;
+                        CursorY = newY;
+                    } else { //if not
+                        if (newX < 0) newX = 0;
+                        if (newX > width) newX = width;
+                        if (newY < 0) newY = 0;
+                        if (newY > height) newY = height;
                         drawingView.drawFromTo(CursorX, CursorY, newX, newY);
-                        CursorX=newX;
-                        CursorY=newY;
+                        CursorX = newX;
+                        CursorY = newY;
                     }
                     Start = new Date(); //set new time
-                }else if (Elapsed > 100)
-                {
+                } else if (Elapsed > 1000) {
                     Start = new Date();
                     xVelocity = 0;
                     yVelocity = 0;
                 }
+                else
+                {
+                    xVelocity = 0;
+                    yVelocity = 0;
+                }
+
             }
         }
 

@@ -24,7 +24,7 @@ public class DrawingView extends View {
     private Paint paint, canvasPaint;
     private Canvas canvas;
     private Bitmap bmp;
-    private float brushSize;
+    public float brushSize;
 
     public DrawingView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -48,9 +48,9 @@ public class DrawingView extends View {
         canvas = new Canvas(bmp);
     }
 
-    public void setColor(String color)
+    public void setColor(int color)
     {
-        paint.setColor(Color.parseColor(color));
+        paint.setColor(color);
     }
 
     public void startNew(){
