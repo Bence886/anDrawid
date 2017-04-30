@@ -15,6 +15,7 @@
 
 package acceptable_risk.nik.uniobuda.hu.andrawid.util;
 
+import android.support.compat.BuildConfig;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -56,9 +57,13 @@ public class Security {
      * @param signature the signature for the data, signed with the private key
      */
     public static boolean verifyPurchase(String base64PublicKey, String signedData, String signature) {
-        if (TextUtils.isEmpty(signedData) || TextUtils.isEmpty(base64PublicKey) ||
+        if (TextUtils.isEmpty(signedData) ||
+                TextUtils.isEmpty(base64PublicKey) ||
                 TextUtils.isEmpty(signature)) {
             Log.e(TAG, "Purchase verification failed: missing data.");
+            if (BuildConfig.DEBUG) {
+                return true;
+            }
             return false;
         }
 
