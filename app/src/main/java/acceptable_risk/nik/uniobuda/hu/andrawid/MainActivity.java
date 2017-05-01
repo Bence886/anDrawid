@@ -29,6 +29,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     float xVelocity=0, yVelocity=0;
     float elozoX = 0;
     float elozoY = 0;
+    int n = 0;
+    float irvektorX = 0;
+    float irvekotY = 0;
     int div =100; //divide the phone movement
     Date Start;
 
@@ -61,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
         fileReadWrite = new FileReadWrite(getBaseContext());
         createDrawerColors();
-
 
         //Get views from xml
         drawer = (RelativeLayout) findViewById(R.id.drawerPane);
@@ -328,59 +332,64 @@ public class MainActivity extends AppCompatActivity {
             width=drawingView.getWidth();
 
             if (Start==null)
-            {//for the first time
+            {//for the firs time
                 Start=new Date(System.currentTimeMillis());
             }
 
-            float Elapsed = new Date(System.currentTimeMillis()).getTime() - Start.getTime(); //calculate time between event calls
+            float Elapsed = new Date().getTime() - Start.getTime(); //calculate time between event calls
 
-            if (event.sensor.getType()==Sensor.TYPE_LINEAR_ACCELERATION && height!=0) { //get LinearAcceleration values
-                ax = event.values[0];
-                ay = event.values[1];
-                az = event.values[2];
+            if (event.sensor.getType()==Sensor.TYPE_LINEAR_ACCELERATION && height!=0){ //get LinearAcceleration values
+                ax=event.values[0];
+                ay=event.values[1];
+                az=event.values[2];
 
                 //if the acceleration is faster than 0.5m/s^2
-                if ((Math.abs(ax) > 0.1 || Math.abs(ay) > 0.1) && Elapsed < 1000) {
-
-
-                    xVelocity += (float) 2 * ax * Elapsed;
-                    yVelocity += (float) 2 * ay * Elapsed;
-
+                if ((Math.abs(ax)>1 || Math.abs(ay)>1) && Elapsed<1000) {
+                    n++;
+                    //átlagoló szürő
+                    irvektorX += ax - elozoX;
+                    irvekotY += ay - elozoY;
+                    float avargeX = irvektorX / n;
+                    float avargeY = irvekotY / n;
+                    elozoX = ax;
+                    elozoY = ay;
+                    //
+                    double angle = Math.atan2(avargeY, avargeX);
+                    xVelocity = (float)Math.cos(angle)*Elapsed;
+                    yVelocity = (float)Math.sin(angle)*Elapsed;
 
                     //calculate X/Y Distance moved
                     //float newX = (CursorX + xVelocity/div);
                     //float newY = (CursorY + yVelocity/div);
 
-                    newX = CursorX + xVelocity / div;
-                    newY = CursorY + yVelocity / div;
+                    newX=CursorX+xVelocity;
+                    newY=CursorY+yVelocity;
+
+
+
 
                     //if the cursor stays in the window
-                    if (newX >= 0 && newY >= 0 && newX <= width && newY <= height) {
+                    if (newX >= 0 && newY >= 0 && newX <= width && newY <= height){
                         drawingView.drawFromTo(CursorX, CursorY, newX, newY);
                         //set new cursor position
-                        CursorX = newX;
-                        CursorY = newY;
-                    } else { //if not
-                        if (newX < 0) newX = 0;
-                        if (newX > width) newX = width;
-                        if (newY < 0) newY = 0;
-                        if (newY > height) newY = height;
+                        CursorX=newX;
+                        CursorY=newY;
+                    }else { //if not
+                        if (newX<0) newX=0;
+                        if (newX>width) newX=width;
+                        if (newY<0) newY=0;
+                        if (newY>height) newY=height;
                         drawingView.drawFromTo(CursorX, CursorY, newX, newY);
-                        CursorX = newX;
-                        CursorY = newY;
+                        CursorX=newX;
+                        CursorY=newY;
                     }
                     Start = new Date(); //set new time
-                } else if (Elapsed > 1000) {
+                }else if (Elapsed > 100)
+                {
                     Start = new Date();
                     xVelocity = 0;
                     yVelocity = 0;
                 }
-                else
-                {
-                    xVelocity = 0;
-                    yVelocity = 0;
-                }
-
             }
         }
 
@@ -388,5 +397,5 @@ public class MainActivity extends AppCompatActivity {
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
         }
-    };
+    };;
 }
