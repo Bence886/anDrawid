@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
             name=data.getStringExtra("name");
 
             MyColor newColor = new MyColor(a, r, g, b);
-            if (name!=null && name !="") {
+            if (name!=null && !name.equals("")) {
                 newColor.colorName = name;
             }
 
