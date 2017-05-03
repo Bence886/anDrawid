@@ -1,6 +1,8 @@
 package acceptable_risk.nik.uniobuda.hu.andrawid;
 
 import android.content.Intent;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,10 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
 
+import acceptable_risk.nik.uniobuda.hu.andrawid.util.Base64;
 import acceptable_risk.nik.uniobuda.hu.andrawid.util.IabHelper;
 import acceptable_risk.nik.uniobuda.hu.andrawid.util.IabResult;
 import acceptable_risk.nik.uniobuda.hu.andrawid.util.Inventory;
@@ -40,6 +44,7 @@ public class PaymentFragment extends Fragment {
 
     //ToDo: Hash It m8!!
     private String myPublicKey = "AIzaSyCypaap51NLHaR4VIu6w55u9VNNuHAHSmk";
+    private ImageView color;
 
     public static PaymentFragment newInstance() {
 
@@ -84,6 +89,10 @@ public class PaymentFragment extends Fragment {
         if (bIsPro) ((ColorPickerActivity)getActivity()).OkClicked();
 
         //TODO: getViews here
+        color = (ImageView) rootView.findViewById(R.id.color);
+        ColorPickerActivity act = (ColorPickerActivity) getActivity();
+        color.getDrawable().setColorFilter(new MyColor(act.cpf.getArguments().getInt("A"), act.cpf.getArguments().getInt("R"), act.cpf.getArguments().getInt("G"), act.cpf.getArguments().getInt("B")).colorint, PorterDuff.Mode.ADD);
+
         pro = (Button) rootView.findViewById(R.id.pro_Button);
         pro.setOnClickListener(new View.OnClickListener() {
             @Override

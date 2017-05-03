@@ -44,6 +44,7 @@ public class ColorPickerActivity extends AppCompatActivity{
         cpf = new ColorPickerFragment().newInstance();
         pf = new PaymentFragment().newInstance();
 
+
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.fragment_control, cpf);
@@ -61,21 +62,7 @@ public class ColorPickerActivity extends AppCompatActivity{
         ok_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (pf.getArguments().getBoolean("payed")){
-                    Intent output = new Intent();
-                    output.putExtra("A", cpf.getArguments().getInt("A"));
-                    output.putExtra("R", cpf.getArguments().getInt("R"));
-                    output.putExtra("G", cpf.getArguments().getInt("G"));
-                    output.putExtra("B", cpf.getArguments().getInt("B"));
-                    output.putExtra("name", cpf.getArguments().getString("name"));
-                    setResult(RESULT_OK, output);
-                    finish();
-                }else {
-                    FragmentManager manager = getSupportFragmentManager();
-                    FragmentTransaction transaction = manager.beginTransaction();
-                    transaction.replace(R.id.fragment_control, pf);
-                    transaction.commit();
-                }
+                OkClicked();
             }
         });
     }
