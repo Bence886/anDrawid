@@ -274,8 +274,9 @@ public class MainActivity extends AppCompatActivity {
             name=data.getStringExtra("name");
 
             MyColor newColor = new MyColor(a, r, g, b);
-            if (name!=null)
-                newColor.colorName=name;
+            if (name!=null && name !="") {
+                newColor.colorName = name;
+            }
 
             drawerMyColors.add(newColor);
             drawingView.setColor(newColor.colorint);

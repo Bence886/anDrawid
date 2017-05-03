@@ -24,8 +24,6 @@ import java.io.IOException;
  * Created by tbenc on 2017. 04. 11..
  */
 
-
-
 //
 //           BackupServicekey
 //  AEdPqrEAAAAIbjXIchngK_AHGHIMqlX14Bmaccz_lycvj_mP4Q
@@ -93,4 +91,23 @@ public class ColorPickerActivity extends AppCompatActivity{
 
         }
     };
+
+    public void OkClicked()
+    {
+        if (pf.getArguments().getBoolean("payed")){
+            Intent output = new Intent();
+            output.putExtra("A", cpf.getArguments().getInt("A"));
+            output.putExtra("R", cpf.getArguments().getInt("R"));
+            output.putExtra("G", cpf.getArguments().getInt("G"));
+            output.putExtra("B", cpf.getArguments().getInt("B"));
+            output.putExtra("name", cpf.getArguments().getString("name"));
+            setResult(RESULT_OK, output);
+            finish();
+        }else {
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.replace(R.id.fragment_control, pf);
+            transaction.commit();
+        }
+    }
 }

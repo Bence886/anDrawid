@@ -69,15 +69,6 @@ public class ColorPickerFragment extends Fragment {
                 if (seekBar == S_B)
                     b = progress;
 
-                name = nameText.getText().toString();
-
-                getArguments().clear();
-                getArguments().putInt("A", a);
-                getArguments().putInt("R", r);
-                getArguments().putInt("G", g);
-                getArguments().putInt("B", b);
-                getArguments().putString("name", name);
-
                 color.getDrawable().setColorFilter(new MyColor(a, r, g, b).colorint, PorterDuff.Mode.ADD);
             }
 
@@ -96,5 +87,19 @@ public class ColorPickerFragment extends Fragment {
         S_R.setOnSeekBarChangeListener(bar);
         S_G.setOnSeekBarChangeListener(bar);
         S_B.setOnSeekBarChangeListener(bar);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        name = nameText.getText().toString();
+
+        getArguments().clear();
+        getArguments().putInt("A", a);
+        getArguments().putInt("R", r);
+        getArguments().putInt("G", g);
+        getArguments().putInt("B", b);
+        getArguments().putString("name", name);
     }
 }
