@@ -106,6 +106,7 @@ public class PaymentFragment extends Fragment {
                     mHelper.launchPurchaseFlow(getActivity(), SKU_PRO, RC_REQUEST, mPurchaseFinishedListener, GeneratePayeload());
                 }catch (IllegalStateException e){
                     SuccessfulPayment();
+                    ((ColorPickerActivity) getActivity()).OkClicked();
                 }
             }
         });
@@ -118,6 +119,7 @@ public class PaymentFragment extends Fragment {
                    mHelper.launchPurchaseFlow(getActivity(), SKU_Color, RC_REQUEST, mPurchaseFinishedListener, GeneratePayeload());
                }catch (IllegalStateException e){
                     SuccessfulPayment();
+                   ((ColorPickerActivity) getActivity()).OkClicked();
                }
             }
         });
