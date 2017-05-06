@@ -17,7 +17,9 @@ import android.hardware.SensorManager;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -29,8 +31,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,9 +42,13 @@ public class MainActivity extends AppCompatActivity {
     float xVelocity=0, yVelocity=0;
     float elozoX = 0;
     float elozoY = 0;
-    int n = 0;
-    float irvektorX = 0;
-    float irvekotY = 0;
+    int nX = 0;
+    int nY = 0;
+    float sumX = 0;
+    float sumY = 0;
+    float elozoVx = 0;
+    float elozoVy = 0;
+    boolean touched = false;
     int div =100; //divide the phone movement
     Date Start;
 
@@ -73,6 +77,31 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         drawingView = (DrawingView)findViewById(R.id.drawingView);
         drawingView.setBrushSize(mediumBrush);
+
+        drawingView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                float x = event.getX();
+                float y = event.getY();
+                int eventaction = event.getAction();
+
+                switch (eventaction)
+                {
+                    case MotionEvent.ACTION_DOWN:
+                    {
+                        Log.d("-----------------------","touch");
+                        touched = true;
+                    }break;
+                    case MotionEvent.ACTION_UP:
+                    {
+                        Log.d("-----------------------","uup");
+                        touched = false;
+                    }break;
+                }
+                return true;
+            }
+        });
 
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -228,7 +257,8 @@ public class MainActivity extends AppCompatActivity {
         sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
     }
 
-    private void createDrawerColors() {
+    private void createDrawerColors()
+    {
         drawerMyColors = new ArrayList<MyColor>();
         //add colors
 
@@ -266,8 +296,12 @@ public class MainActivity extends AppCompatActivity {
         largeBrush = 30;
     }
 
+
+
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         if (requestCode==1 && resultCode == RESULT_OK && data != null) {
             int a, r, g, b;
             String name;
@@ -294,12 +328,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
+    protected void onStart()
+    {
         super.onStart();
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
 
         //Sensor event listener register
@@ -307,7 +343,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
+    protected void onPause()
+    {
         super.onPause();
 
         //unregister sensor listener at app pause
@@ -315,7 +352,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop()
+    {
         super.onStop();
     }
 
@@ -328,67 +366,99 @@ public class MainActivity extends AppCompatActivity {
             //get the window properties (hopefully they are set by this time)
             float newX;
             float newY;
-            height=drawingView.getHeight();
-            width=drawingView.getWidth();
+            height = drawingView.getHeight();
+            width = drawingView.getWidth();
 
-            if (Start==null)
-            {//for the firs time
-                Start=new Date(System.currentTimeMillis());
+            if (Start == null) {//for the firs time
+                Start = new Date(System.currentTimeMillis());
             }
 
-            float Elapsed = new Date().getTime() - Start.getTime(); //calculate time between event calls
+            float Elapsed = new Date(System.currentTimeMillis()).getTime() - Start.getTime(); //calculate time between event calls
 
-            if (event.sensor.getType()==Sensor.TYPE_LINEAR_ACCELERATION && height!=0){ //get LinearAcceleration values
-                ax=event.values[0];
-                ay=event.values[1];
-                az=event.values[2];
+            if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION && height != 0) { //get LinearAcceleration values
+                ax = -event.values[0];
+                ay = event.values[1];
+                az = event.values[2];
 
-                //if the acceleration is faster than 0.5m/s^2
-                if ((Math.abs(ax)>1 || Math.abs(ay)>1) && Elapsed<1000) {
-                    n++;
-                    //átlagoló szürő
-                    irvektorX += ax - elozoX;
-                    irvekotY += ay - elozoY;
-                    float avargeX = irvektorX / n;
-                    float avargeY = irvekotY / n;
-                    elozoX = ax;
-                    elozoY = ay;
-                    //
-                    double angle = Math.atan2(avargeY, avargeX);
-                    xVelocity = (float)Math.cos(angle)*Elapsed;
-                    yVelocity = (float)Math.sin(angle)*Elapsed;
+                //átlagoló szürő
+                nX++;
+                sumX += ax;
 
-                    //calculate X/Y Distance moved
-                    //float newX = (CursorX + xVelocity/div);
-                    //float newY = (CursorY + yVelocity/div);
+                nY++;
+                sumY += ay;
 
-                    newX=CursorX+xVelocity;
-                    newY=CursorY+yVelocity;
+                float avargeX;
+                if (nX != 0) {
+                    avargeX = sumX / nX;
+                } else {
+                    avargeX = 0;
+                }
 
+                float avargeY;
+                if (nY != 0) {
+                    avargeY = sumY / nY;
+                } else {
+                    avargeY = 0;
+                }
+                // --------------
+                float irvektorX = avargeX - elozoX;
+                float irvektorY = avargeY - elozoY;
+                elozoX = avargeX;
+                elozoY = avargeY;
+                //
+                if (Elapsed < 0.05f) {
+                    Elapsed = 0.05f;
+                }
 
+                double angle = Math.atan2(irvektorY, irvektorX);
+                xVelocity = (float) Math.cos(angle) * 8;
+                yVelocity = (float) Math.sin(angle) * 8;
 
+                //calculate X/Y Distance moved
+                double seb = (Math.abs(xVelocity - elozoVx) + Math.abs(yVelocity - elozoVy)) / Elapsed;
+                elozoVx = xVelocity;
+                elozoVy = yVelocity;
 
-                    //if the cursor stays in the window
-                    if (newX >= 0 && newY >= 0 && newX <= width && newY <= height){
+                Log.d("-----------", "x: " + xVelocity + "    y: " + yVelocity + "     Elapsed: " + Elapsed + "   seb: " + seb);
+                newX = (float) (CursorX + xVelocity);
+                newY = (float) (CursorY + yVelocity);
+
+                //if screen is touched
+                if (touched)
+                {
+                    if (newX >= 0 && newY >= 0 && newX <= width && newY <= height) {
                         drawingView.drawFromTo(CursorX, CursorY, newX, newY);
                         //set new cursor position
-                        CursorX=newX;
-                        CursorY=newY;
-                    }else { //if not
-                        if (newX<0) newX=0;
-                        if (newX>width) newX=width;
-                        if (newY<0) newY=0;
-                        if (newY>height) newY=height;
+                        CursorX = newX;
+                        CursorY = newY;
+                    } else { //if not
+                        if (newX < 0) newX = 0;
+                        if (newX > width) newX = width;
+                        if (newY < 0) newY = 0;
+                        if (newY > height) newY = height;
                         drawingView.drawFromTo(CursorX, CursorY, newX, newY);
-                        CursorX=newX;
-                        CursorY=newY;
+                        CursorX = newX;
+                        CursorY = newY;
                     }
-                    Start = new Date(); //set new time
-                }else if (Elapsed > 100)
+                }
+                else
                 {
-                    Start = new Date();
-                    xVelocity = 0;
-                    yVelocity = 0;
+                    if (newX >= 0 && newY >= 0 && newX <= width && newY <= height) {
+                        drawingView.Move(newX, newY);
+                        //set new cursor position
+                        CursorX = newX;
+                        CursorY = newY;
+                    } else { //if not
+                        if (newX < 0) newX = 0;
+                        if (newX > width) newX = width;
+                        if (newY < 0) newY = 0;
+                        if (newY > height) newY = height;
+                        drawingView.Move(newX, newY);
+                        CursorX = newX;
+                        CursorY = newY;
+                    }
+
+                    Start = new Date(System.currentTimeMillis()); //set new time
                 }
             }
         }
@@ -397,5 +467,5 @@ public class MainActivity extends AppCompatActivity {
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
         }
-    };;
+    };
 }

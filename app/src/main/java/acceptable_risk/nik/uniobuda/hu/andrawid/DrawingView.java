@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -25,6 +26,8 @@ public class DrawingView extends View {
     private Canvas canvas;
     private Bitmap bmp;
     public float brushSize;
+    float x, y;
+
 
     public DrawingView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -35,7 +38,7 @@ public class DrawingView extends View {
     protected void onDraw(Canvas canvas) {
         canvas.drawBitmap(bmp, 0, 0, canvasPaint);
         canvas.drawPath(path, paint);
-
+        canvas.drawPoint(x, y, paint);
         //Only for testing
         //Random r = new Random();
             //drawFromTo(r.nextInt(1000), r.nextInt(2000), r.nextInt(1000), r.nextInt(2000));
@@ -74,11 +77,18 @@ public class DrawingView extends View {
     {
         path.moveTo(x1, y1);
         path.lineTo(x2, y2);
-        if (x1!=x2 && y1!=y2)
-        {
+        //if (x1!=x2 && y1!=y2)
+       // {
             canvas.drawPath(path,  paint);
-        }
+       // }
         path.reset();
+        invalidate();
+    }
+
+    public void Move(float x, float y)
+    {
+        this.x = x;
+        this.y = y;
         invalidate();
     }
 
