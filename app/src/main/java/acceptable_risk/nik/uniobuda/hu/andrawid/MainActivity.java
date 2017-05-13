@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Matrix;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -33,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
+import jkalman.JKalman;
+
 public class MainActivity extends AppCompatActivity {
     //sensor variables
     private SensorManager sensorManager;
@@ -49,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     float elozoVx = 0;
     float elozoVy = 0;
     boolean touched = false;
+    JKalman szuro;
     int div =100; //divide the phone movement
     Date Start;
 
@@ -70,13 +74,17 @@ public class MainActivity extends AppCompatActivity {
 
         fileReadWrite = new FileReadWrite(getBaseContext());
         createDrawerColors();
-
         //Get views from xml
         drawer = (RelativeLayout) findViewById(R.id.drawerPane);
         drawerList = (GridView) findViewById(R.id.drawerList);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         drawingView = (DrawingView)findViewById(R.id.drawingView);
         drawingView.setBrushSize(mediumBrush);
+        try {
+            szuro = new JKalman(10, 10, 10);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         drawingView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -380,6 +388,11 @@ public class MainActivity extends AppCompatActivity {
                 ay = event.values[1];
                 az = event.values[2];
 
+               /* jama.Matrix mat = new jama.Matrix(2, 1);
+                mat.set(0, 0, ax);
+                mat.set(1, 0, ay);
+                jama.Matrix corr = szuro.Correct(mat);*/
+
                 //átlagoló szürő
                 nX++;
                 sumX += ax;
@@ -411,8 +424,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 double angle = Math.atan2(irvektorY, irvektorX);
-                xVelocity = (float) Math.cos(angle) * 8;
-                yVelocity = (float) Math.sin(angle) * 8;
+                xVelocity = (float) Math.cos(angle) * Math.abs(ax) * 2;
+                yVelocity = (float) Math.sin(angle) * Math.abs(ay) * 2;
 
                 //calculate X/Y Distance moved
                 double seb = (Math.abs(xVelocity - elozoVx) + Math.abs(yVelocity - elozoVy)) / Elapsed;
@@ -457,7 +470,6 @@ public class MainActivity extends AppCompatActivity {
                         CursorX = newX;
                         CursorY = newY;
                     }
-
                     Start = new Date(System.currentTimeMillis()); //set new time
                 }
             }
