@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
-import jkalman.JKalman;
 
 public class MainActivity extends AppCompatActivity {
     //sensor variables
@@ -49,10 +48,7 @@ public class MainActivity extends AppCompatActivity {
     int nY = 0;
     float sumX = 0;
     float sumY = 0;
-    float elozoVx = 0;
-    float elozoVy = 0;
     boolean touched = false;
-    JKalman szuro;
     int div =100; //divide the phone movement
     Date Start;
 
@@ -80,11 +76,6 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         drawingView = (DrawingView)findViewById(R.id.drawingView);
         drawingView.setBrushSize(mediumBrush);
-        try {
-            szuro = new JKalman(10, 10, 10);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         drawingView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -377,21 +368,10 @@ public class MainActivity extends AppCompatActivity {
             height = drawingView.getHeight();
             width = drawingView.getWidth();
 
-            if (Start == null) {//for the firs time
-                Start = new Date(System.currentTimeMillis());
-            }
-
-            float Elapsed = new Date(System.currentTimeMillis()).getTime() - Start.getTime(); //calculate time between event calls
-
             if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION && height != 0) { //get LinearAcceleration values
                 ax = -event.values[0];
                 ay = event.values[1];
                 az = event.values[2];
-
-               /* jama.Matrix mat = new jama.Matrix(2, 1);
-                mat.set(0, 0, ax);
-                mat.set(1, 0, ay);
-                jama.Matrix corr = szuro.Correct(mat);*/
 
                 //átlagoló szürő
                 nX++;
@@ -419,20 +399,13 @@ public class MainActivity extends AppCompatActivity {
                 elozoX = avargeX;
                 elozoY = avargeY;
                 //
-                if (Elapsed < 0.05f) {
-                    Elapsed = 0.05f;
-                }
 
                 double angle = Math.atan2(irvektorY, irvektorX);
                 xVelocity = (float) Math.cos(angle) * Math.abs(ax) * 2;
                 yVelocity = (float) Math.sin(angle) * Math.abs(ay) * 2;
 
                 //calculate X/Y Distance moved
-                double seb = (Math.abs(xVelocity - elozoVx) + Math.abs(yVelocity - elozoVy)) / Elapsed;
-                elozoVx = xVelocity;
-                elozoVy = yVelocity;
 
-                Log.d("-----------", "x: " + xVelocity + "    y: " + yVelocity + "     Elapsed: " + Elapsed + "   seb: " + seb);
                 newX = (float) (CursorX + xVelocity);
                 newY = (float) (CursorY + yVelocity);
 
@@ -470,7 +443,6 @@ public class MainActivity extends AppCompatActivity {
                         CursorX = newX;
                         CursorY = newY;
                     }
-                    Start = new Date(System.currentTimeMillis()); //set new time
                 }
             }
         }
