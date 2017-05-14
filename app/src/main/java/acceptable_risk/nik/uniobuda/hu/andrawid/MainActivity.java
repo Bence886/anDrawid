@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Matrix;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -49,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
     float sumX = 0;
     float sumY = 0;
     boolean touched = false;
-    int div =100; //divide the phone movement
     Date Start;
 
     DrawingView drawingView;
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     GridView drawerList;
     RelativeLayout drawer;
     DrawerLayout drawerLayout;
+    String model;
 
     ArrayList<MyColor> drawerMyColors;
     FileReadWrite fileReadWrite;
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         drawingView = (DrawingView)findViewById(R.id.drawingView);
         drawingView.setBrushSize(mediumBrush);
+        model = Build.MODEL;
 
         drawingView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -89,15 +91,15 @@ public class MainActivity extends AppCompatActivity {
                 {
                     case MotionEvent.ACTION_DOWN:
                     {
-                        Log.d("-----------------------","touch");
                         touched = true;
                     }break;
+
                     case MotionEvent.ACTION_UP:
                     {
-                        Log.d("-----------------------","uup");
                         touched = false;
                     }break;
                 }
+
                 return true;
             }
         });
@@ -369,30 +371,28 @@ public class MainActivity extends AppCompatActivity {
             width = drawingView.getWidth();
 
             if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION && height != 0) { //get LinearAcceleration values
-                ax = -event.values[0];
+                if (model.contains("SM"))
+                {
+                    ax = -event.values[0];
+                }
+                else
+                {
+                    ax = event.values[0];
+                }
                 ay = event.values[1];
                 az = event.values[2];
 
-                //átlagoló szürő
+
+
+                //Avarge filter
                 nX++;
                 sumX += ax;
-
                 nY++;
                 sumY += ay;
-
                 float avargeX;
-                if (nX != 0) {
-                    avargeX = sumX / nX;
-                } else {
-                    avargeX = 0;
-                }
-
+                avargeX = sumX / nX;
                 float avargeY;
-                if (nY != 0) {
-                    avargeY = sumY / nY;
-                } else {
-                    avargeY = 0;
-                }
+                avargeY = sumY / nY;
                 // --------------
                 float irvektorX = avargeX - elozoX;
                 float irvektorY = avargeY - elozoY;
