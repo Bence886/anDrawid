@@ -24,7 +24,6 @@ public class DrawingView extends View {
     private Bitmap bmp;
     public float brushSize;
     float x, y;
-    boolean draw;
 
 
     public DrawingView(Context context, AttributeSet attrs) {
@@ -37,11 +36,9 @@ public class DrawingView extends View {
     {
         canvas.drawBitmap(bmp, 0, 0, canvasPaint);
         canvas.drawPath(path, paint);
-        if (!draw)
-        {
-            canvas.drawPoint(x, y, dpaint);
-            canvas.drawPoint(x, y, paint);
-        }
+        canvas.drawPoint(x, y, dpaint);
+        canvas.drawPoint(x, y, paint);
+
     }
 
     @Override
@@ -85,7 +82,6 @@ public class DrawingView extends View {
 
     public void drawFromTo(float x1, float y1, float x2, float y2)
     {
-        draw = true;
         path.moveTo(x1, y1);
         path.lineTo(x2, y2);
         canvas.drawPath(path,  paint);
@@ -95,7 +91,6 @@ public class DrawingView extends View {
 
     public void Move(float x, float y)
     {
-        draw = false;
         this.x = x;
         this.y = y;
         invalidate();

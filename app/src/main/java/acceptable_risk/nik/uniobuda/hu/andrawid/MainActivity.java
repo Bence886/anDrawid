@@ -414,6 +414,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     if (newX >= 0 && newY >= 0 && newX <= width && newY <= height) {
                         drawingView.drawFromTo(CursorX, CursorY, newX, newY);
+                        drawingView.Move(newX, newY);
                         //set new cursor position
                         CursorX = newX;
                         CursorY = newY;
@@ -423,6 +424,7 @@ public class MainActivity extends AppCompatActivity {
                         if (newY < 0) newY = 0;
                         if (newY > height) newY = height;
                         drawingView.drawFromTo(CursorX, CursorY, newX, newY);
+                        drawingView.Move(newX, newY);
                         CursorX = newX;
                         CursorY = newY;
                     }
